@@ -170,7 +170,7 @@ export const contact: Contact = {
 	email: "hwy.dev@gmail.com",
 	phone: "+66 62 815 2947",
 	linkedin: "https://www.linkedin.com/in/htet-waiyan",
-	github: "https://github.com/hwy-dev",
+	github: "https://github.com/HtetWaiYann",
 	location: "Based in Chiang Mai, Thailand (Huaykaew Place)",
 	availability: "Available for full-stack and cloud-focused roles",
 };
