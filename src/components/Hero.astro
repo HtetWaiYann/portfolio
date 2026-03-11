@@ -1,0 +1,76 @@
+---
+import { Icon } from 'astro-icon/components';
+import type { Contact, HeroContent } from "../data/content";
+
+interface Props {
+	hero: HeroContent;
+	contact: Contact;
+}
+
+const { hero, contact } = Astro.props;
+---
+
+<!-- Wrapper allows dashed rings to bleed outside the card -->
+<div class="relative" data-animate>
+	<!-- Dashed decorative rings -->
+	<div
+		class="pointer-events-none absolute rounded-full border-2 border-dashed border-[#e85d1c]/55"
+		style="width: 280px; height: 280px; top: -22px; left: -22px; z-index: 1"
+	></div>
+	<div
+		class="pointer-events-none absolute rounded-full border-2 border-dashed border-[#e85d1c]/25"
+		style="width: 180px; height: 180px; bottom: 30px; left: -14px; z-index: 1"
+	></div>
+
+	<!-- Card -->
+	<div class="relative overflow-hidden rounded-3xl bg-white shadow-2xl shadow-black/30" style="z-index: 2">
+		<!-- Portrait photo -->
+		<div class="mx-auto lg:mx-5 w-[200px] lg:w-auto mt-5 overflow-hidden rounded-2xl bg-[#e85d1c]" style="height: 220px">
+			<img
+				class="h-full w-full object-cover object-top"
+				src={hero.image}
+				alt={hero.imageAlt}
+				width="240"
+				height="220"
+				loading="eager"
+			/>
+		</div>
+
+		<!-- Info -->
+		<div class="px-6 pb-7 pt-5 text-center">
+			<h1 class="text-2xl font-bold leading-tight text-[#0a0a0a]">{hero.name}</h1>
+
+			<!-- Bio -->
+			<p class="mt-3 text-sm leading-relaxed text-[#888888] my-4!">{hero.heroSummary}</p>
+
+			<!-- Social links -->
+			<div class="mt-8 flex justify-center gap-3">
+				<a
+					href={contact.linkedin}
+					target="_blank"
+					rel="noreferrer"
+					aria-label="LinkedIn"
+					class="flex h-9 w-9 cursor-pointer items-center justify-center rounded-full border border-[#f0e8e4] bg-[#fdf3ee] transition-all duration-200 hover:bg-[#fce4d4] hover:-translate-y-0.5"
+				>
+					<Icon name="lucide:linkedin" width="16" height="16" class="text-[#e85d1c]" />
+				</a>
+				<a
+					href={contact.github}
+					target="_blank"
+					rel="noreferrer"
+					aria-label="GitHub"
+					class="flex h-9 w-9 cursor-pointer items-center justify-center rounded-full border border-[#f0e8e4] bg-[#fdf3ee] transition-all duration-200 hover:bg-[#fce4d4] hover:-translate-y-0.5"
+				>
+					<Icon name="lucide:github" width="16" height="16" class="text-[#e85d1c]" />
+				</a>
+				<a
+					href={`tel:${contact.phone.replace(/\s+/g, "")}`}
+					aria-label="Phone"
+					class="flex h-9 w-9 cursor-pointer items-center justify-center rounded-full border border-[#f0e8e4] bg-[#fdf3ee] transition-all duration-200 hover:bg-[#fce4d4] hover:-translate-y-0.5"
+				>
+					<Icon name="lucide:phone" width="16" height="16" class="text-[#e85d1c]"/>
+				</a>
+			</div>
+		</div>
+	</div>
+</div>

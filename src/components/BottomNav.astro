@@ -1,0 +1,31 @@
+---
+import { Icon } from 'astro-icon/components';
+
+const links = [
+	{ href: "#intro", icon: "lucide:house", label: "Home" },
+	{ href: "#projects", icon: "lucide:folder", label: "Projects" },
+	{ href: "#experience", icon: "lucide:briefcase", label: "Experience" },
+	{ href: "#skills", icon: "lucide:wrench", label: "Skills" },
+	{ href: "#contact", icon: "lucide:square-pen", label: "Contact" },
+];
+---
+
+<nav
+	class="fixed bottom-6 left-1/2 z-50 -translate-x-1/2"
+	aria-label="Section navigation"
+>
+	<div
+		class="flex items-center gap-1 rounded-full px-3 py-2.5 shadow-2xl shadow-black/60"
+		style="background: rgba(22, 22, 22, 0.85); border: 1px solid rgba(255,255,255,0.07); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px)"
+	>
+		{links.map((link) => (
+			<a
+				href={link.href}
+				aria-label={link.label}
+				class="flex h-10 w-10 cursor-pointer items-center justify-center rounded-full text-[#888888] transition-all duration-200 hover:bg-white/10 hover:text-white"
+			>
+				<Icon name={link.icon} width="19" height="19" />
+			</a>
+		))}
+	</div>
+</nav>

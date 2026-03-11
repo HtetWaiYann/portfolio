@@ -1,0 +1,36 @@
+---
+import { Icon } from 'astro-icon/components';
+import type { Contact, HeroContent, SkillGroups } from "../data/content";
+
+interface Props {
+	hero: HeroContent;
+	about: string[];
+	skills: SkillGroups;
+	contact: Contact;
+}
+
+const { hero } = Astro.props;
+---
+
+<section id="intro">
+	<!-- Main heading -->
+	<div data-animate>
+		<h1 class="font-black uppercase leading-none tracking-tight mb-4" style="font-size: clamp(60px, 8.5vw, 108px)">
+			<span class="block text-white">FULL STACK</span>
+			<span class="block" style="color: #1e1e1e">DEVELOPER</span>
+		</h1>
+		<p class="mt-6 max-w-lg text-sm leading-relaxed text-[#888888]">
+			{hero.summary}
+		</p>
+	</div>
+
+	<!-- Stats -->
+	<div class="mt-10 flex flex-wrap gap-10" data-animate data-delay="1">
+		{hero.highlights.map((stat) => (
+			<div>
+				<div class="text-4xl font-black text-white">{stat.value}</div>
+				<div class="mt-1 text-[10px] font-semibold uppercase tracking-widest text-[#555555]">{stat.label}</div>
+			</div>
+		))}
+	</div>
+</section>

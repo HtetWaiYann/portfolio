@@ -1,0 +1,40 @@
+---
+import type { SkillGroups } from "../data/content";
+
+interface Props {
+	skills: SkillGroups;
+}
+
+const { skills } = Astro.props;
+
+const groups = [
+	{ title: "Front-end", items: skills.frontend },
+	{ title: "Back-end", items: skills.backend },
+	{ title: "Databases", items: skills.databases },
+	{ title: "Cloud & DevOps", items: skills.cloudDevops },
+	{ title: "Certifications", items: skills.certifications },
+	{ title: "Languages", items: skills.languages },
+];
+---
+
+<section id="skills">
+	<h2 class="font-black uppercase leading-none tracking-tight mb-4" data-animate style="font-size: clamp(40px, 5.5vw, 68px)">
+		<span class="block text-white">SKILLS</span>
+		<span class="block" style="color: #1e1e1e">& TOOLS</span>
+	</h2>
+
+	<div class="mt-10 grid gap-6 sm:grid-cols-2">
+		{groups.map((group, i) => (
+			<div data-animate data-delay={Math.min(i + 1, 5)}>
+				<h4 class="mb-4 text-[10px] font-semibold uppercase tracking-widest text-[#e85d1c]">{group.title}</h4>
+				<div class="flex flex-wrap gap-2">
+					{group.items.map((skill) => (
+						<span class="cursor-default rounded-full border border-[#1c1c1c] bg-[#111111] px-3 py-1 text-xs text-[#888888] transition-all duration-200 hover:-translate-y-0.5 hover:border-[#e85d1c]/40 hover:text-[#cccccc]">
+							{skill}
+						</span>
+					))}
+				</div>
+			</div>
+		))}
+	</div>
+</section>

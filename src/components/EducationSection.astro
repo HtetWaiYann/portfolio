@@ -1,0 +1,29 @@
+---
+import type { Education } from "../data/content";
+
+interface Props {
+	education: Education[];
+}
+
+const { education } = Astro.props;
+---
+
+<section id="education">
+	<h2 class="font-black uppercase leading-none tracking-tight mb-4" data-animate style="font-size: clamp(40px, 5.5vw, 68px)">
+		<span class="block text-white">EDUCATION</span>
+		<span class="block" style="color: #1e1e1e">& LEARNING</span>
+	</h2>
+
+	<div class="mt-10 divide-y divide-[#1c1c1c]">
+		{education.map((item, i) => (
+			<div
+				data-animate
+				data-delay={Math.min(i + 1, 5)}
+				class="py-7 transition-colors duration-200 hover:bg-[#0e0e0e] -mx-3 px-3 rounded-xl"
+			>
+				<h3 class="text-base font-semibold leading-snug text-white mb-4">{item.title}</h3>
+				<p class="mt-2.5 text-xs text-[#555555]">{item.period}</p>
+			</div>
+		))}
+	</div>
+</section>

@@ -1,5 +1,24 @@
 ---
-
+import { ClientRouter } from "astro:transitions";
+import Hero from "../components/Hero.astro";
+import IntroPanel from "../components/IntroPanel.astro";
+import AboutSection from "../components/AboutSection.astro";
+import ExperienceSection from "../components/ExperienceSection.astro";
+import ProjectsSection from "../components/ProjectsSection.astro";
+import SkillsSection from "../components/SkillsSection.astro";
+import EducationSection from "../components/EducationSection.astro";
+import ContactSection from "../components/ContactSection.astro";
+import BottomNav from "../components/BottomNav.astro";
+import {
+	hero,
+	about,
+	experiences,
+	projects,
+	skills,
+	education,
+	contact,
+} from "../data/content";
+import "../styles/global.css";
 ---
 
 <html lang="en">
@@ -7,11 +26,64 @@
 		<meta charset="utf-8" />
 		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 		<link rel="icon" href="/favicon.ico" />
-		<meta name="viewport" content="width=device-width" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
 		<meta name="generator" content={Astro.generator} />
-		<title>Astro</title>
+		<title>Htet Wai Yan — Full Stack Developer</title>
+		<meta name="description" content="Portfolio of Htet Wai Yan, a full-stack developer specialising in Angular, React, Node.js and AWS. Available for remote and on-site roles." />
+		<meta name="author" content="Htet Wai Yan" />
+		<meta name="robots" content="index, follow" />
+		<meta name="theme-color" content="#0a0a0a" />
+
+		<meta property="og:type" content="website" />
+		<meta property="og:title" content="Htet Wai Yan — Full Stack Developer" />
+		<meta property="og:description" content="Portfolio of Htet Wai Yan, a full-stack developer specialising in Angular, React, Node.js and AWS." />
+		<meta property="og:site_name" content="Htet Wai Yan" />
+
+		<meta name="twitter:card" content="summary" />
+		<meta name="twitter:title" content="Htet Wai Yan — Full Stack Developer" />
+		<meta name="twitter:description" content="Portfolio of Htet Wai Yan, a full-stack developer specialising in Angular, React, Node.js and AWS." />
+
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800;900&display=swap"
+			rel="stylesheet"
+		/>
+		<ClientRouter />
 	</head>
 	<body>
-		<h1>Astro</h1>
+		<div class="page-layout">
+			<aside class="page-sidebar">
+				<Hero hero={hero} contact={contact} />
+			</aside>
+			<main class="page-content">
+				<IntroPanel hero={hero} about={about} skills={skills} contact={contact} />
+				<AboutSection about={about} />
+				<ProjectsSection projects={projects} />
+				<ExperienceSection experiences={experiences} />
+				<SkillsSection skills={skills} />
+				<EducationSection education={education} />
+				<ContactSection contact={contact} />
+			</main>
+		</div>
+		<BottomNav />
+		<script>
+			function initAnimations() {
+				const observer = new IntersectionObserver(
+					(entries) => {
+						entries.forEach((entry) => {
+							if (entry.isIntersecting) {
+								entry.target.classList.add('in-view');
+								observer.unobserve(entry.target);
+							}
+						});
+					},
+					{ threshold: 0.08, rootMargin: '0px 0px -40px 0px' }
+				);
+				document.querySelectorAll('[data-animate]').forEach((el) => observer.observe(el));
+			}
+
+			document.addEventListener('astro:page-load', initAnimations);
+		</script>
 	</body>
 </html>
