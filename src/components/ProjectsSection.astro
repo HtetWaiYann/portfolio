@@ -49,6 +49,18 @@ const { projects } = Astro.props;
 								))}
 							</ul>
 						)}
+						{project.images && project.images.length > 0 && (
+							<div class="mt-5 grid grid-cols-1 gap-3 sm:grid-cols-2">
+								{project.images.map((image) => (
+									<img
+										src={image}
+										alt={`${project.title} screenshot`}
+										loading="lazy"
+										class="h-40 w-full rounded-lg border border-[#1c1c1c] object-cover sm:h-48"
+									/>
+								))}
+							</div>
+						)}
 					</div>
 
 					<!-- Arrow -->

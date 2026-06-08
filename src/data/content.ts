@@ -21,6 +21,7 @@ export type Project = {
 	description: string;
 	points: string[];
 	link?: { label: string; href: string };
+	images?: string[];
 };
 
 export type SkillGroups = {
@@ -114,29 +115,27 @@ export const experiences: Experience[] = [
 
 export const projects: Project[] = [
 	{
+		title: "Triggr",
+		description: "A visual, node-based workflow builder that lets users design, configure, and run automation workflows through a drag-and-drop canvas — no code required.",
+		points: [
+			"Drag-and-drop canvas with trigger, HTTP request, transformer, condition, delay, and output nodes.",
+			"Real-time per-node execution status, execution history, and template interpolation across upstream outputs.",
+			"REST API and scheduled (cron) triggers backed by BullMQ + Redis, with AES-256-GCM encrypted workspace variables.",
+			"Built with React 19, React Flow, Zustand, and Tailwind on the frontend; Node.js, Express, Prisma, and PostgreSQL on the backend.",
+		],
+		link: { label: "View on GitHub →", href: "https://github.com/HtetWaiYann/workflow-builder" },
+		images: ["/projects/triggr-1.png", "/projects/triggr-2.png"],
+	},
+	{
 		title: "Angular Internal Labs",
-		description: "Interactive platform that visualizes Angular internals such as change detection, signals, RxJS streams, routing lifecycle, and dependency  Injection in real time.",
-		points: [],
-		link: { label: "Visit project →", href: "https://angular-internal-labs.vercel.app" },
-	},
-	{
-		title: "SmartEmail",
-		description: "An AI-powered email management system that intelligently classifies messages, prioritizes tasks, and generates smart replies to streamline inbox workflows.",
+		description: "Interactive platform that visualizes Angular internals such as change detection, signals, RxJS streams, routing lifecycle, and dependency injection in real time.",
 		points: [
-			"Improved email response efficiency by implementing AI-driven categorization and urgency scoring system.",
-			"Smart summaries plus tone-aware reply suggestions for fast responses.",
-			"Decision-based actions (archive/reply/later)."	
+			"Hands-on labs for change detection, signals, RxJS, router lifecycle, dependency injection, and trackBy.",
+			"Router lab walks through guards, resolvers, and lazy-loaded children with a live timeline view.",
+			"Built on Angular 21 with standalone components, lazy-loaded routes, and Vitest for unit tests.",
 		],
-		link: { label: "View on GitHub →", href: "https://github.com/HtetWaiYann/Smart-Email" },
-	},
-	{
-		title: "MMBookHive",
-		description: "A full-featured book review and reading tracking application inspired by Letterboxd.",
-		points: [
-			"Browse and search with social reviews; rate, log, and discuss.",
-			"Build shelves, set reading goals, and share progress with friends.",
-		],
-		link: { label: "View on GitHub →", href: "https://github.com/HtetWaiYann/MMBookHive" },
+		link: { label: "Visit project →", href: "https://angular-internal-labs.htetwaiyan.com" },
+		images: ["/projects/ail-1.png", "/projects/ail-2.png"],
 	},
 ];
 
