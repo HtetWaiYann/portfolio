@@ -14,8 +14,9 @@
   "dependencies": {
     "@emailjs/browser": "^4.4.1",
     "@iconify-json/lucide": "^1.2.96",
-    "@tailwindcss/vite": "^4.2.1",
-    "astro": "^6.0.2",
+    "@tailwindcss/vite": "^4.3.3",
+    "@vercel/analytics": "^2.0.1",
+    "astro": "^7.2.4",
     "astro-icon": "^1.1.5",
     "emailjs": "^5.0.0",
     "tailwindcss": "^4.2.1"

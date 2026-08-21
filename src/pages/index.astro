@@ -19,6 +19,7 @@ import {
 	contact,
 } from "../data/content";
 import "../styles/global.css";
+import Analytics from '@vercel/analytics/astro'
 ---
 
 <html lang="en">
@@ -66,6 +67,7 @@ import "../styles/global.css";
 		</script>
 
 		<ClientRouter />
+		<Analytics />
 	</head>
 	<body>
 		<div class="page-layout">

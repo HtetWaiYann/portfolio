@@ -137,6 +137,16 @@ export const projects: Project[] = [
 		link: { label: "Visit project →", href: "https://angular-internal-labs.htetwaiyan.com" },
 		images: ["/projects/ail-1.png", "/projects/ail-2.png"],
 	},
+		{
+		title: "RELAX",
+		description: "Relax is a torrent streaming for movies and series. It is a personal project, built for my own use — not a product, not something I expect anyone else to run. It exists mostly as an excuse to design a real cross-runtime desktop app end to end.",
+		points: [
+			"Desktop streaming app for movie geeks",
+			"The architecture is what I care about here — the contract-first boundary, the locked-down Electron layer, the interface-driven backend",
+		],
+		link: { label: "Visit project →", href: "https://relax.htetwaiyan.com" },
+		images: ["/projects/relax-1.png", "/projects/relax-2.png"],
+	},
 ];
 
 export const skills: SkillGroups = {
