@@ -82,8 +82,17 @@ export const about: string[] = [
 
 export const experiences: Experience[] = [
 	{
+		title: "Front End Developer · <a href=\"https://www.ironsoftware.com\" target=\"_blank\">Iron Software</a> (Freelance)",
+		period: "2026 June - 2026 Auguest",
+		bullets: [
+			"Migrated legacy PHP-based websites to Astro",
+			"Converted legacy CSS and hardcoded content to Tailwind CSS and JSON-based localization, improving maintainability and consistency across pages.",
+			"Performed detailed UI QA and cross-page consistency checks, fixing feedback and visual issues across a large set of localized product pages."
+		],
+	},
+	{
 		title: "Full Stack Developer · Win Intelligence Software Ltd (Freelance)",
-		period: "2024 - Present",
+		period: "2024 - 2026",
 		bullets: [
 			"Developed and maintained full-stack web applications using Angular, React, Next.js, Vue.js and Svelte for front-end development",
 			"Implemented backend services with Node.js and Express.js, leveraging AWS for cloud infrastructure and services",
@@ -150,8 +159,8 @@ export const projects: Project[] = [
 ];
 
 export const skills: SkillGroups = {
-	frontend: ["Angular", "React", "Next.js", "Vue.js", "Svelte"],
-	backend: ["Node.js", "Express.js", "TypeScript", "JavaScript", "HTML/CSS"],
+	frontend: ["Angular", "React", "Next.js", "Vue.js", "Svelte", "Astro"],
+	backend: ["Node.js", "Express.js", "Fastify", "TypeScript", "JavaScript", "HTML/CSS"],
 	databases: ["MySQL", "PostgreSQL", "MongoDB", "DynamoDB"],
 	cloudDevops: ["AWS", "DigitalOcean", "CI/CD", "CloudFormation", "CircleCI"],
 	certifications: ["AWS Certified Cloud Practitioner", "AI Programming with Python (Udacity)"],
