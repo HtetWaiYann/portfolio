@@ -136,17 +136,17 @@ export const projects: Project[] = [
 		images: ["/projects/triggr-1.png", "/projects/triggr-2.png"],
 	},
 	{
-		title: "Angular Internal Labs",
-		description: "Interactive platform that visualizes Angular internals such as change detection, signals, RxJS streams, routing lifecycle, and dependency injection in real time.",
+		title: "ATS-Ready Resume",
+		description: "ATS-friendly, lightweight, local-only resume editor. Build and export a clean, parseable resume — no account, no server, your data stays in your browser.",
 		points: [
-			"Hands-on labs for change detection, signals, RxJS, router lifecycle, dependency injection, and trackBy.",
-			"Router lab walks through guards, resolvers, and lazy-loaded children with a live timeline view.",
-			"Built on Angular 21 with standalone components, lazy-loaded routes, and Vitest for unit tests.",
+			"Multiple ATS-friendly templates that you can customize to match your style and make your resume stand out",
+			"A quick sanity check for the basics — contact info, standard sections, dates, quantified bullets, machine-readable format.",
+			"Edit, import, and export entirely in your browser with no account or server required, keeping your resume data on your device",
 		],
-		link: { label: "Visit project →", href: "https://angular-internal-labs.htetwaiyan.com" },
-		images: ["/projects/ail-1.png", "/projects/ail-2.png"],
+		link: { label: "Visit project →", href: "https://resume.htetwaiyan.com" },
+		images: ["/projects/ats-1.png", "/projects/ats-2.png"],
 	},
-		{
+	{
 		title: "RELAX",
 		description: "Relax is a torrent streaming for movies and series. It is a personal project, built for my own use — not a product, not something I expect anyone else to run. It exists mostly as an excuse to design a real cross-runtime desktop app end to end.",
 		points: [
