@@ -13,7 +13,7 @@ const { projects } = Astro.props;
 	<!-- Heading -->
 	<h2 class="font-black uppercase leading-none tracking-tight mb-4" data-animate style="font-size: clamp(48px, 7vw, 88px)">
 		<span class="block text-white">RECENT</span>
-		<span class="block" style="color: #1e1e1e">PROJECTS</span>
+		<span class="block" style="color: #2e2e2e">PROJECTS</span>
 	</h2>
 
 	<!-- Project list -->
@@ -30,14 +30,16 @@ const { projects } = Astro.props;
 				data-delay={Math.min(i + 1, 5)}
 				class="group flex items-start gap-5 py-7 -mx-3 px-3 rounded-xl transition-colors duration-200 hover:bg-[#0e0e0e]"
 				>
-					<!-- Index block -->
-					<div class="flex h-14 w-16 shrink-0 items-center justify-center rounded-xl border border-[#1c1c1c] bg-[#111111] transition-colors duration-200 group-hover:border-[#e85d1c]/30">
+					<!-- Index block (desktop only) -->
+					<div class="hidden sm:flex h-14 w-16 shrink-0 items-center justify-center rounded-xl border border-[#1c1c1c] bg-[#111111] transition-colors duration-200 group-hover:border-[#e85d1c]/30">
 						<span class="text-xs font-bold text-[#333333] transition-colors duration-200 group-hover:text-[#e85d1c]/60">0{i + 1}</span>
 					</div>
 
 					<!-- Content -->
 					<div class="flex-1 min-w-0">
-						<h3 class="text-lg font-semibold leading-tight text-white mb-4">{project.title}</h3>
+						<h3 class="text-lg font-semibold leading-tight text-white mb-4">
+							<span class="mr-2 font-normal text-[#555555] sm:hidden">0{i + 1}</span>{project.title}
+						</h3>
 						<p class="mt-2.5 text-sm leading-relaxed text-[#777777]">{project.description}</p>
 						{project.points.length > 0 && (
 							<ul class="mt-3 space-y-1">

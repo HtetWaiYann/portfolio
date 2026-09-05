@@ -1,12 +1,9 @@
 ---
 import { Icon } from 'astro-icon/components';
-import type { Contact, HeroContent, SkillGroups } from "../data/content";
+import type { HeroContent } from "../data/content";
 
 interface Props {
 	hero: HeroContent;
-	about: string[];
-	skills: SkillGroups;
-	contact: Contact;
 }
 
 const { hero } = Astro.props;
@@ -17,11 +14,19 @@ const { hero } = Astro.props;
 	<div data-animate>
 		<h1 class="font-black uppercase leading-none tracking-tight mb-4" style="font-size: clamp(60px, 8.5vw, 108px)">
 			<span class="block text-white">FULL STACK</span>
-			<span class="block" style="color: #1e1e1e">DEVELOPER</span>
+			<span class="block" style="color: #2e2e2e">DEVELOPER</span>
 		</h1>
 		<p class="mt-6 max-w-lg text-sm leading-relaxed text-[#888888]">
 			{hero.summary}
 		</p>
+		<a
+			href="/HtetWaiYan_Resume.pdf"
+			download
+			class="mt-8 inline-flex items-center gap-2 rounded-xl bg-[#e85d1c] px-6 py-3 text-sm font-semibold text-white transition-colors duration-200 hover:bg-[#d44f0f]"
+		>
+			<Icon name="lucide:download" width="16" height="16" />
+			Download CV
+		</a>
 	</div>
 
 	<!-- Stats -->

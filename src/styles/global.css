@@ -18,6 +18,12 @@ body {
 	-moz-osx-font-smoothing: grayscale;
 }
 
+/* Display headings (the giant ghost-type h1/h2) use a grotesk;
+   h3 job/project titles stay on Poppins. */
+h1, h2 {
+	font-family: "Space Grotesk", "Poppins", sans-serif;
+}
+
 a {
 	color: inherit;
 	text-decoration: none;

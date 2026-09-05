@@ -5,8 +5,6 @@ export type HeroContent = {
 	heroSummary: string;
 	image: string;
 	imageAlt: string;
-	cta: { label: string; href: string }[];
-	meta: string[];
 	highlights: { label: string; value: string }[];
 };
 
@@ -56,21 +54,10 @@ export const hero: HeroContent = {
 		"A developer who enjoys building modern web applications and turning ideas into real products. I like working across the whole stack, from creating clean user interfaces to building APIs and deploying systems to the cloud. I’m always interested in learning how technologies work under the hood and improving how applications perform and scale.",
 	image: "/avatar.png",
 	imageAlt: "Portrait of Htet Wai Yan",
-	cta: [
-		{ label: "Email", href: "mailto:hwy.dev@gmail.com" },
-		{ label: "Call", href: "tel:+66628152947" },
-		{ label: "LinkedIn", href: "https://www.linkedin.com/in/htet-waiyan" },
-		{ label: "GitHub", href: "https://github.com/HtetWaiYann" },
-	],
-	meta: [
-		"Chiang Mai, Thailand · Remote friendly",
-		"Full-stack builds, cloud-first delivery, pragmatic leadership",
-		"Ships fast without dropping quality",
-	],
 	highlights: [
 		{ label: "Years of Experience", value: "5+" },
 		{ label: "Daily active users served", value: "3k+" },
-		{ label: "Main Stacks", value: "Angular · Svelte · React · Node.js" },
+		{ label: "Main Stacks", value: "Angular · React · Svelte · Node.js" },
 	],
 };
 
@@ -83,7 +70,7 @@ export const about: string[] = [
 export const experiences: Experience[] = [
 	{
 		title: "Front End Developer · <a href=\"https://www.ironsoftware.com\" target=\"_blank\">Iron Software</a> (Freelance)",
-		period: "2026 June - 2026 Auguest",
+		period: "2026 June - 2026 August",
 		bullets: [
 			"Migrated legacy PHP-based websites to Astro",
 			"Converted legacy CSS and hardcoded content to Tailwind CSS and JSON-based localization, improving maintainability and consistency across pages.",
