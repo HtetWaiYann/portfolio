@@ -69,7 +69,7 @@ export const about: string[] = [
 
 export const experiences: Experience[] = [
 	{
-		title: "Front End Developer · <a href=\"https://www.ironsoftware.com\" target=\"_blank\">Iron Software</a> (Freelance)",
+		title: "Front End Developer · <a href=\"https://www.ironsoftware.com\" target=\"_blank\" rel=\"noopener noreferrer\">Iron Software</a> (Freelance)",
 		period: "2026 June - 2026 August",
 		bullets: [
 			"Migrated legacy PHP-based websites to Astro",

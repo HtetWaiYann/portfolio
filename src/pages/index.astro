@@ -37,17 +37,32 @@ import Analytics from '@vercel/analytics/astro'
 
 		<link rel="canonical" href="https://www.htetwaiyan.com" />
 
+		<script type="application/ld+json" set:html={JSON.stringify({
+			"@context": "https://schema.org",
+			"@type": "Person",
+			name: "Htet Wai Yan",
+			jobTitle: "Full Stack Developer",
+			url: "https://www.htetwaiyan.com",
+			image: "https://www.htetwaiyan.com/avatar.png",
+			address: { "@type": "PostalAddress", addressLocality: "Chiang Mai", addressCountry: "TH" },
+			sameAs: [contact.linkedin, contact.github],
+			knowsAbout: ["Angular", "React", "Node.js", "AWS", "TypeScript", "Svelte", "Next.js"],
+		})} />
+
 		<meta property="og:type" content="website" />
 		<meta property="og:title" content="Htet Wai Yan — Full Stack Developer" />
 		<meta property="og:description" content="Portfolio of Htet Wai Yan, a full-stack developer specialising in Angular, React, Node.js and AWS." />
 		<meta property="og:site_name" content="Htet Wai Yan" />
 		<meta property="og:url" content="https://www.htetwaiyan.com" />
-		<meta property="og:image" content="https://www.htetwaiyan.com/avatar.png" />
+		<meta property="og:image" content="https://www.htetwaiyan.com/og.png" />
+		<meta property="og:image:width" content="1200" />
+		<meta property="og:image:height" content="630" />
 		<meta property="og:logo" content="https://www.htetwaiyan.com/favicon.svg" />
 
-		<meta name="twitter:card" content="summary" />
+		<meta name="twitter:card" content="summary_large_image" />
 		<meta name="twitter:title" content="Htet Wai Yan — Full Stack Developer" />
 		<meta name="twitter:description" content="Portfolio of Htet Wai Yan, a full-stack developer specialising in Angular, React, Node.js and AWS." />
+		<meta name="twitter:image" content="https://www.htetwaiyan.com/og.png" />
 
 		<link rel="preconnect" href="https://fonts.googleapis.com" />
 		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -70,11 +85,15 @@ import Analytics from '@vercel/analytics/astro'
 		<Analytics />
 	</head>
 	<body>
+		<a
+			href="#main"
+			class="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[100] focus:rounded-lg focus:bg-[#e85d1c] focus:px-4 focus:py-2 focus:text-sm focus:font-semibold focus:text-white"
+		>Skip to content</a>
 		<div class="page-layout">
 			<aside class="page-sidebar">
 				<Hero hero={hero} contact={contact} />
 			</aside>
-			<main class="page-content">
+			<main id="main" class="page-content">
 				<IntroPanel hero={hero} />
 				<AboutSection about={about} />
 				<ProjectsSection projects={projects} />
