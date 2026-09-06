@@ -122,5 +122,53 @@ import Analytics from '@vercel/analytics/astro'
 
 			document.addEventListener('astro:page-load', initAnimations);
 		</script>
+
+		<script>
+			// Custom GA4 events for named clicks + scroll milestones.
+			// GA4 Enhanced Measurement already covers page views, engagement time,
+			// and generic downloads/outbound — this adds the readable, granular bits.
+			type Gtag = (...args: unknown[]) => void;
+
+			function initTracking() {
+				const gtag = (window as unknown as { gtag?: Gtag }).gtag;
+				if (typeof gtag !== 'function') return;
+				// Listeners live on document/window, so bind once across SPA navigations.
+				if ((window as unknown as { __track?: boolean }).__track) return;
+				(window as unknown as { __track?: boolean }).__track = true;
+
+				document.addEventListener('click', (e) => {
+					const link = (e.target as HTMLElement).closest('a');
+					if (!link) return;
+					const href = link.getAttribute('href') ?? '';
+
+					if (link.hasAttribute('download') || href.endsWith('.pdf')) {
+						gtag('event', 'cv_download', { link_url: href });
+					} else if (/^https?:\/\//.test(href) && !href.includes(location.host)) {
+						gtag('event', 'outbound_click', {
+							link_url: href,
+							link_text: link.getAttribute('aria-label') || link.textContent?.trim().slice(0, 50),
+						});
+					}
+				});
+
+				const marks = [25, 50, 75, 100];
+				const seen = new Set<number>();
+				const onScroll = () => {
+					const pct = Math.round(
+						((window.scrollY + window.innerHeight) / document.body.scrollHeight) * 100
+					);
+					for (const m of marks) {
+						if (pct >= m && !seen.has(m)) {
+							seen.add(m);
+							gtag('event', 'scroll_depth', { percent: m });
+						}
+					}
+					if (seen.size === marks.length) window.removeEventListener('scroll', onScroll);
+				};
+				window.addEventListener('scroll', onScroll, { passive: true });
+			}
+
+			document.addEventListener('astro:page-load', initTracking);
+		</script>
 	</body>
 </html>
