@@ -19,6 +19,10 @@
     "astro": "^7.2.4",
     "astro-icon": "^1.1.5",
     "emailjs": "^5.0.0",
-    "tailwindcss": "^4.2.1"
+    "tailwindcss": "^4.2.1",
+    "three": "^0.186.0"
+  },
+  "devDependencies": {
+    "@types/three": "^0.186.0"
   }
 }

@@ -1,0 +1,639 @@
+---
+// Interactive 3D graveyard portfolio. Walk a grave keeper (arrow keys / WASD)
+// around a walled compound; each monument is a portfolio section — stand near
+// it and press E to open the content panel.
+// Models: Kenney Graveyard Kit (CC0, https://kenney.nl/assets/graveyard-kit).
+// Vanilla three.js in a bundled client <script>; panels reuse the same section
+// components as the main page, so content stays single-sourced.
+import { ClientRouter } from "astro:transitions";
+import AboutSection from "../components/AboutSection.astro";
+import ProjectsSection from "../components/ProjectsSection.astro";
+import ExperienceSection from "../components/ExperienceSection.astro";
+import SkillsSection from "../components/SkillsSection.astro";
+import EducationSection from "../components/EducationSection.astro";
+import ContactSection from "../components/ContactSection.astro";
+import {
+	hero,
+	about,
+	experiences,
+	projects,
+	skills,
+	education,
+	contact,
+} from "../data/content";
+import "../styles/global.css";
+import Analytics from "@vercel/analytics/astro";
+---
+
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<link rel="icon" href="/favicon.ico" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<meta name="generator" content={Astro.generator} />
+		<title>Htet Wai Yan — 3D Graveyard (Interactive Portfolio)</title>
+		<meta
+			name="description"
+			content="Explore Htet Wai Yan's portfolio as a walkable 3D graveyard. Roam with arrow keys and visit each monument for projects, experience, skills and more."
+		/>
+		<meta name="author" content="Htet Wai Yan" />
+		<meta name="robots" content="index, follow" />
+		<meta name="theme-color" content="#06070d" />
+		<link rel="canonical" href="https://www.htetwaiyan.com/demo" />
+
+		<meta property="og:type" content="website" />
+		<meta property="og:title" content="Htet Wai Yan — Interactive 3D Graveyard" />
+		<meta
+			property="og:description"
+			content="A walkable 3D graveyard version of my portfolio. Roam and explore."
+		/>
+		<meta property="og:url" content="https://www.htetwaiyan.com/demo" />
+		<meta property="og:image" content="https://www.htetwaiyan.com/og.png" />
+
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800;900&family=Space+Grotesk:wght@500;600;700&display=swap"
+			rel="stylesheet"
+		/>
+
+		<!-- Google tag (gtag.js) -->
+		<script async src="https://www.googletagmanager.com/gtag/js?id=G-8Z83GCJ91M"></script>
+		<script>
+			window.dataLayer = window.dataLayer || [];
+			function gtag(){dataLayer.push(arguments);}
+			gtag('js', new Date());
+			gtag('config', 'G-8Z83GCJ91M');
+		</script>
+
+		<ClientRouter />
+		<Analytics />
+	</head>
+	<body>
+		<canvas id="scene" aria-hidden="true"></canvas>
+
+		<!-- HUD -->
+		<header class="hud-top">
+			<a href="/" class="hud-back" aria-label="Back to main portfolio">← Portfolio</a>
+			<div class="hud-title">
+				<span class="hud-name">{hero.name}</span>
+				<span class="hud-role">{hero.title} · 3D Graveyard</span>
+			</div>
+		</header>
+		<p class="hud-hint" id="hud-hint">Arrow keys / WASD to walk · Shift to run · E at a monument</p>
+
+		<!-- Proximity prompt -->
+		<div id="prompt" class="prompt" hidden></div>
+
+		<!-- Loading overlay -->
+		<div id="loading" class="overlay loading">
+			<div class="loading-inner">
+				<div class="loading-bar"><span id="loading-fill"></span></div>
+				<p class="loading-text">Entering the graveyard… <span id="loading-pct">0%</span></p>
+			</div>
+		</div>
+
+		<!-- No-WebGL / reduced-motion / no-keyboard fallback -->
+		<div id="fallback" class="overlay fallback" hidden>
+			<div class="fallback-inner">
+				<h1>{hero.name}</h1>
+				<p>
+					The walkable 3D graveyard needs WebGL, a keyboard and motion enabled.
+					No worries — the full portfolio lives on the main page.
+				</p>
+				<a class="fallback-link" href="/">Open the portfolio →</a>
+			</div>
+		</div>
+
+		<!-- Content panels (hidden until you enter a monument). Reuse main sections. -->
+		<div id="backdrop" class="backdrop" hidden></div>
+		<div class="panels" id="panels">
+			<article class="panel" id="panel-about" role="dialog" aria-modal="true" aria-label="About" hidden>
+				<button class="panel-close" aria-label="Close">✕</button>
+				<div class="panel-body"><AboutSection about={about} /></div>
+			</article>
+			<article class="panel" id="panel-projects" role="dialog" aria-modal="true" aria-label="Projects" hidden>
+				<button class="panel-close" aria-label="Close">✕</button>
+				<div class="panel-body"><ProjectsSection projects={projects} /></div>
+			</article>
+			<article class="panel" id="panel-experience" role="dialog" aria-modal="true" aria-label="Experience" hidden>
+				<button class="panel-close" aria-label="Close">✕</button>
+				<div class="panel-body"><ExperienceSection experiences={experiences} /></div>
+			</article>
+			<article class="panel" id="panel-skills" role="dialog" aria-modal="true" aria-label="Skills" hidden>
+				<button class="panel-close" aria-label="Close">✕</button>
+				<div class="panel-body"><SkillsSection skills={skills} /></div>
+			</article>
+			<article class="panel" id="panel-education" role="dialog" aria-modal="true" aria-label="Education" hidden>
+				<button class="panel-close" aria-label="Close">✕</button>
+				<div class="panel-body"><EducationSection education={education} /></div>
+			</article>
+			<article class="panel" id="panel-contact" role="dialog" aria-modal="true" aria-label="Contact" hidden>
+				<button class="panel-close" aria-label="Close">✕</button>
+				<div class="panel-body"><ContactSection contact={contact} /></div>
+			</article>
+		</div>
+
+		<style is:global>
+			html, body { height: 100%; overflow: hidden; }
+			#scene { position: fixed; inset: 0; width: 100vw; height: 100vh; display: block; }
+
+			.panel [data-animate] { opacity: 1 !important; transform: none !important; transition: none !important; }
+
+			.hud-top {
+				position: fixed; top: 20px; left: 20px; right: 20px; z-index: 20;
+				display: flex; align-items: center; gap: 16px; pointer-events: none;
+			}
+			.hud-back {
+				pointer-events: auto;
+				font-size: 13px; font-weight: 600; color: #fff;
+				background: rgba(10,10,14,0.7); border: 1px solid rgba(255,255,255,0.08);
+				padding: 8px 14px; border-radius: 999px; backdrop-filter: blur(12px);
+				transition: background .2s;
+			}
+			.hud-back:hover { background: rgba(232,93,28,0.9); }
+			.hud-title { display: flex; flex-direction: column; line-height: 1.2; }
+			.hud-name { font-family: "Space Grotesk", sans-serif; font-weight: 700; font-size: 15px; }
+			.hud-role { font-size: 11px; color: #8b8f9a; }
+			.hud-hint {
+				position: fixed; bottom: 22px; left: 50%; transform: translateX(-50%); z-index: 20;
+				font-size: 12px; color: #aab; background: rgba(10,10,14,0.7);
+				border: 1px solid rgba(255,255,255,0.08); padding: 8px 16px; border-radius: 999px;
+				backdrop-filter: blur(12px); transition: opacity .4s;
+			}
+			.prompt {
+				position: fixed; bottom: 62px; left: 50%; transform: translateX(-50%); z-index: 25;
+				font-size: 13px; font-weight: 600; color: #fff;
+				background: rgba(232,93,28,0.92); padding: 9px 18px; border-radius: 999px;
+				box-shadow: 0 10px 30px rgba(232,93,28,.35); white-space: nowrap;
+			}
+			.prompt b { font-weight: 800; }
+
+			.overlay { position: fixed; inset: 0; z-index: 50; display: grid; place-items: center; background: #06070d; }
+			.loading-inner, .fallback-inner { text-align: center; max-width: 420px; padding: 24px; }
+			.loading-bar { width: 240px; height: 4px; border-radius: 999px; background: #1c1c24; overflow: hidden; margin: 0 auto; }
+			.loading-bar span { display: block; height: 100%; width: 0%; background: #e85d1c; transition: width .2s ease; }
+			.loading-text { margin-top: 14px; font-size: 13px; color: #888; }
+			.overlay.loading.hidden { opacity: 0; pointer-events: none; transition: opacity .5s; }
+			.fallback-inner h1 { font-family: "Space Grotesk", sans-serif; font-size: 32px; margin: 0 0 12px; }
+			.fallback-inner p { color: #999; font-size: 14px; margin: 0 0 20px; }
+			.fallback-link { color: #e85d1c; font-weight: 600; }
+
+			.backdrop { position: fixed; inset: 0; z-index: 40; background: rgba(0,0,0,.6); backdrop-filter: blur(4px); }
+			.panels { position: fixed; inset: 0; z-index: 41; pointer-events: none; display: grid; place-items: center; }
+			.panel {
+				pointer-events: auto; position: relative;
+				width: min(760px, 92vw); max-height: 86vh; overflow-y: auto;
+				background: #0a0a0a; border: 1px solid #1c1c1c; border-radius: 20px;
+				padding: 40px 36px; box-shadow: 0 30px 80px rgba(0,0,0,.6);
+				animation: panel-in .32s cubic-bezier(.16,1,.3,1);
+			}
+			@keyframes panel-in { from { opacity: 0; transform: translateY(24px) scale(.98); } to { opacity: 1; transform: none; } }
+			.panel-close {
+				position: sticky; top: 0; float: right; margin: -12px -8px 0 0;
+				width: 36px; height: 36px; border-radius: 50%; border: none;
+				background: #1c1c1c; color: #fff; font-size: 15px; line-height: 1;
+			}
+			.panel-close:hover { background: #e85d1c; }
+			@media (max-width: 600px) { .panel { padding: 28px 20px; } }
+		</style>
+
+		<script>
+			import * as THREE from "three";
+			import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
+
+			type Section = "about" | "projects" | "experience" | "skills" | "education" | "contact";
+			type Gtag = (...args: unknown[]) => void;
+
+			// Portfolio monuments: prop model, section, label, world position.
+			type Mon = { file: string; section: Section; label: string; x: number; z: number; ry: number };
+			const MONUMENTS: Mon[] = [
+				{ file: "crypt-large",            section: "about",      label: "About Me",   x: 0,    z: -11, ry: 0 },
+				{ file: "pillar-obelisk",         section: "projects",   label: "Projects",   x: -7.5, z: -7,  ry: 0 },
+				{ file: "altar-stone",            section: "skills",     label: "Skills",     x: 7.5,  z: -7,  ry: 0 },
+				{ file: "gravestone-cross-large", section: "experience", label: "Experience", x: -9,   z: 1.5, ry: 0.3 },
+				{ file: "gravestone-decorative",  section: "education",  label: "Education",  x: 9,    z: 1.5, ry: -0.3 },
+				{ file: "lightpost-single",       section: "contact",    label: "Contact",    x: 0,    z: 7,   ry: 0 },
+			];
+
+			const GRAVES = ["grave", "gravestone-bevel", "gravestone-round", "gravestone-broken", "gravestone-cross", "cross", "cross-wood"];
+			const TREES = ["pine", "pine-crooked", "pine-fall-crooked"];
+			const PROPS = ["lantern-candle", "fire-basket", "pumpkin-carved", "pumpkin", "urn-round", "rocks", "bench", "crypt-small"];
+			const STRUCT = ["brick-wall", "fence-gate", "road"];
+
+			const HALF = 14;                 // compound half-size
+			const BOUND = HALF - 1.6;         // player clamp
+			const SPEED = 6, RUN = 10;
+			const FACING = Math.PI;           // model faces +Z; add PI so it faces travel dir
+			const CAMOFF = new THREE.Vector3(0, 12, 15);
+
+			let renderer: THREE.WebGLRenderer;
+			let scene: THREE.Scene;
+			let camera: THREE.PerspectiveCamera;
+			let player: THREE.Object3D | null = null;
+			let mixer: THREE.AnimationMixer | null = null;
+			const actions: Record<string, THREE.AnimationAction> = {};
+			let currentAction = "idle";
+			const clock = new THREE.Clock();
+			let raf = 0, disposed = false, panelOpen = false;
+			const keys = new Set<string>();
+			const monuments: { section: Section; label: string; pos: THREE.Vector3 }[] = [];
+			let active: (typeof monuments)[number] | null = null;
+			const UP = new THREE.Vector3(0, 1, 0);
+
+			function gtagEvent(name: string, params: Record<string, unknown>) {
+				const g = (window as unknown as { gtag?: Gtag }).gtag;
+				if (typeof g === "function") g(name, params);
+			}
+			function hasWebGL(): boolean {
+				try {
+					const c = document.createElement("canvas");
+					return !!(c.getContext("webgl2") || c.getContext("webgl"));
+				} catch { return false; }
+			}
+
+			// Center a prop in x/z with its base at y=0.
+			function normalize(obj: THREE.Object3D) {
+				const box = new THREE.Box3().setFromObject(obj);
+				const size = new THREE.Vector3(); box.getSize(size);
+				const center = new THREE.Vector3(); box.getCenter(center);
+				const g = new THREE.Group();
+				obj.position.set(-center.x, -box.min.y, -center.z);
+				g.add(obj);
+				return { group: g, size };
+			}
+			function shadowize(o: THREE.Object3D) {
+				o.traverse((c) => { if ((c as THREE.Mesh).isMesh) { c.castShadow = true; c.receiveShadow = true; } });
+			}
+
+			async function init() {
+				const canvas = document.getElementById("scene") as HTMLCanvasElement | null;
+				if (!canvas) return;
+
+				const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+				const noKeyboard = window.matchMedia("(pointer: coarse)").matches || window.innerWidth < 720;
+				if (!hasWebGL() || reduced || noKeyboard) { showFallback(); return; }
+
+				scene = new THREE.Scene();
+				scene.background = new THREE.Color("#06070d");
+				scene.fog = new THREE.Fog("#06070d", 12, 46);
+
+				renderer = new THREE.WebGLRenderer({ canvas, antialias: true });
+				renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+				renderer.setSize(window.innerWidth, window.innerHeight);
+				renderer.shadowMap.enabled = true;
+				renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+
+				camera = new THREE.PerspectiveCamera(48, window.innerWidth / window.innerHeight, 0.1, 200);
+				camera.position.set(0, 12, 24);
+				camera.lookAt(0, 1, 8);
+
+				buildGround();
+				buildLights();
+				await loadAll();
+				if (disposed) return;
+
+				bindInput();
+				window.addEventListener("resize", onResize);
+				gtagEvent("demo_loaded", {});
+				clock.start();
+				animate();
+				hideLoading();
+			}
+
+			function buildGround() {
+				const ground = new THREE.Mesh(
+					new THREE.PlaneGeometry(HALF * 2 + 8, HALF * 2 + 8),
+					new THREE.MeshStandardMaterial({ color: "#15180f", roughness: 1 })
+				);
+				ground.rotation.x = -Math.PI / 2;
+				ground.receiveShadow = true;
+				scene.add(ground);
+			}
+
+			function buildLights() {
+				scene.add(new THREE.HemisphereLight("#2f3d5c", "#0c0e12", 0.85));
+				scene.add(new THREE.AmbientLight("#3a4260", 0.25));
+				// Cool moonlight — the only shadow caster.
+				const moon = new THREE.DirectionalLight("#aebdff", 1.0);
+				moon.position.set(12, 22, 8);
+				moon.castShadow = true;
+				moon.shadow.mapSize.set(2048, 2048);
+				const d = HALF + 2;
+				moon.shadow.camera.left = -d; moon.shadow.camera.right = d;
+				moon.shadow.camera.top = d; moon.shadow.camera.bottom = -d;
+				moon.shadow.camera.far = 60;
+				moon.shadow.bias = -0.0005;
+				scene.add(moon);
+			}
+
+			// Warm orange point light (brand) — used for lanterns, braziers, monuments.
+			function glow(x: number, y: number, z: number, intensity = 6, dist = 8) {
+				const p = new THREE.PointLight("#e85d1c", intensity, dist, 2);
+				p.position.set(x, y, z);
+				scene.add(p);
+			}
+
+			function loadAll(): Promise<void> {
+				const manager = new THREE.LoadingManager();
+				const fill = document.getElementById("loading-fill") as HTMLElement | null;
+				const pct = document.getElementById("loading-pct") as HTMLElement | null;
+				manager.onProgress = (_u, loaded, total) => {
+					const p = Math.round((loaded / total) * 100);
+					if (fill) fill.style.width = p + "%";
+					if (pct) pct.textContent = p + "%";
+				};
+				const loader = new GLTFLoader(manager);
+				const templates: Record<string, { group: THREE.Group; size: THREE.Vector3 }> = {};
+
+				const files = Array.from(new Set([
+					...MONUMENTS.map((m) => m.file), ...GRAVES, ...TREES, ...PROPS, ...STRUCT,
+				]));
+
+				const loadTemplate = (file: string) =>
+					new Promise<void>((res, rej) =>
+						loader.load(`/models/${file}.glb`, (g) => { templates[file] = normalize(g.scene); res(); }, undefined, rej)
+					);
+
+				const loadPlayer = () =>
+					new Promise<void>((res, rej) =>
+						loader.load("/models/character-keeper.glb", (g) => {
+							player = g.scene;
+							shadowize(player);
+							player.position.set(0, 0, 11);
+							player.rotation.y = Math.PI; // face into the yard
+							player.scale.setScalar(1.25); // the star of the scene reads bigger
+							// A warm lantern the keeper carries — keeps them lit anywhere.
+							const torch = new THREE.PointLight("#ffcf8a", 7, 11, 2);
+							torch.position.set(0, 1.4, 0.3);
+							player.add(torch);
+							mixer = new THREE.AnimationMixer(player);
+							for (const name of ["idle", "walk", "sprint"]) {
+								const clip = THREE.AnimationClip.findByName(g.animations, name);
+								if (clip) actions[name] = mixer.clipAction(clip);
+							}
+							actions["idle"]?.play();
+							scene.add(player);
+							res();
+						}, undefined, rej)
+					);
+
+				return Promise.all([loadPlayer(), ...files.map(loadTemplate)]).then(() => {
+					const inst = (file: string) => {
+						const t = templates[file];
+						const g = t.group.clone(true);
+						shadowize(g);
+						return { g, size: t.size };
+					};
+
+					buildWalls(inst);
+					buildPath(inst);
+					placeMonuments(inst);
+					scatter(inst);
+				});
+			}
+
+			// ── Scene assembly ───────────────────────────────────────────
+			function buildWalls(inst: (f: string) => { g: THREE.Object3D; size: THREE.Vector3 }) {
+				const seg = inst("brick-wall").size.x || 2;
+				const line = (x0: number, z0: number, x1: number, z1: number) => {
+					const dx = x1 - x0, dz = z1 - z0;
+					const len = Math.hypot(dx, dz);
+					const n = Math.max(1, Math.round(len / seg));
+					const ry = Math.atan2(-dz, dx);
+					for (let i = 0; i < n; i++) {
+						const t = (i + 0.5) / n;
+						const { g } = inst("brick-wall");
+						g.position.set(x0 + dx * t, 0, z0 + dz * t);
+						g.rotation.y = ry;
+						scene.add(g);
+					}
+				};
+				line(-HALF, -HALF, HALF, -HALF);   // back
+				line(-HALF, -HALF, -HALF, HALF);   // left
+				line(HALF, -HALF, HALF, HALF);     // right
+				line(-HALF, HALF, -2.6, HALF);     // front-left
+				line(2.6, HALF, HALF, HALF);       // front-right
+				const gate = inst("fence-gate");
+				gate.g.position.set(0, 0, HALF);
+				scene.add(gate.g);
+			}
+
+			function buildPath(inst: (f: string) => { g: THREE.Object3D; size: THREE.Vector3 }) {
+				const len = inst("road").size.z || 2;
+				const from = HALF - 1, to = -HALF + 3;
+				const n = Math.max(1, Math.round((from - to) / len));
+				for (let i = 0; i < n; i++) {
+					const { g } = inst("road");
+					g.position.set(0, 0.02, from - (i + 0.5) * ((from - to) / n));
+					scene.add(g);
+				}
+			}
+
+			function placeMonuments(inst: (f: string) => { g: THREE.Object3D; size: THREE.Vector3 }) {
+				for (const m of MONUMENTS) {
+					const { g, size } = inst(m.file);
+					g.position.set(m.x, 0, m.z);
+					g.rotation.y = m.ry;
+					scene.add(g);
+					glow(m.x, size.y + 0.4, m.z, 7, 9); // beacon so it reads as interactive
+					monuments.push({ section: m.section, label: m.label, pos: new THREE.Vector3(m.x, 0, m.z) });
+				}
+			}
+
+			function scatter(inst: (f: string) => { g: THREE.Object3D; size: THREE.Vector3 }) {
+				const clearOf = (x: number, z: number, r: number) =>
+					MONUMENTS.every((m) => Math.hypot(m.x - x, m.z - z) > r) && Math.abs(x) > 2.4;
+
+				// Grave plots left & right of the path.
+				for (let side = -1; side <= 1; side += 2) {
+					for (let gx = 4; gx <= 11.5; gx += 2.4) {
+						for (let gz = -9; gz <= 9; gz += 2.6) {
+							const x = side * gx + (Math.random() - 0.5), z = gz + (Math.random() - 0.5);
+							if (!clearOf(x, z, 2.4)) continue;
+							if (Math.random() < 0.25) continue; // gaps
+							const { g } = inst(GRAVES[(Math.random() * GRAVES.length) | 0]);
+							g.position.set(x, 0, z);
+							g.rotation.y = Math.PI + (Math.random() - 0.5) * 0.5;
+							scene.add(g);
+						}
+					}
+				}
+
+				// Trees near the walls.
+				const treeSpots = [[-12, -12], [12, -12], [-12, 11], [12, 11], [-12, -1], [12, -1], [-5, -12.5], [5, -12.5]];
+				for (const [x, z] of treeSpots) {
+					const { g } = inst(TREES[(Math.random() * TREES.length) | 0]);
+					g.position.set(x, 0, z);
+					g.rotation.y = Math.random() * Math.PI * 2;
+					scene.add(g);
+				}
+
+				// Lanterns along the path (with warm glow).
+				for (const z of [6, 1, -4, -9]) {
+					for (const x of [-2.4, 2.4]) {
+						const { g, size } = inst("lantern-candle");
+						g.position.set(x, 0, z);
+						scene.add(g);
+						glow(x, size.y * 0.8, z, 4, 6);
+					}
+				}
+
+				// Braziers flanking the crypt.
+				for (const x of [-3.4, 3.4]) {
+					const { g, size } = inst("fire-basket");
+					g.position.set(x, 0, -10.5);
+					scene.add(g);
+					glow(x, size.y, -10.5, 6, 8);
+				}
+
+				// Odds & ends.
+				const odds: [string, number, number][] = [
+					["pumpkin-carved", -3, 6], ["pumpkin", 3.2, -2], ["urn-round", -3.2, -6],
+					["rocks", 3.4, 5], ["bench", -3.4, 3], ["crypt-small", -12, 5], ["crypt-small", 12, 6],
+					["pumpkin-carved", 2.8, -9], ["rocks", -2.8, -1],
+				];
+				for (const [file, x, z] of odds) {
+					const { g } = inst(file);
+					g.position.set(x, 0, z);
+					g.rotation.y = Math.random() * Math.PI * 2;
+					scene.add(g);
+				}
+			}
+
+			// ── Player control / loop ────────────────────────────────────
+			function setAction(name: string) {
+				if (currentAction === name || !actions[name]) return;
+				actions[currentAction]?.fadeOut(0.18);
+				actions[name].reset().fadeIn(0.18).play();
+				currentAction = name;
+			}
+
+			const camDir = new THREE.Vector3();
+			const right = new THREE.Vector3();
+			const move = new THREE.Vector3();
+
+			function animate() {
+				if (disposed) return;
+				raf = requestAnimationFrame(animate);
+				const dt = Math.min(clock.getDelta(), 0.05);
+				if (mixer) mixer.update(dt);
+
+				if (player && !panelOpen) {
+					camera.getWorldDirection(camDir); camDir.y = 0; camDir.normalize();
+					right.crossVectors(camDir, UP).normalize();
+					move.set(0, 0, 0);
+					if (keys.has("f")) move.add(camDir);
+					if (keys.has("b")) move.sub(camDir);
+					if (keys.has("r")) move.add(right);
+					if (keys.has("l")) move.sub(right);
+
+					if (move.lengthSq() > 0) {
+						move.normalize();
+						const sp = keys.has("run") ? RUN : SPEED;
+						player.position.addScaledVector(move, sp * dt);
+						player.position.x = Math.max(-BOUND, Math.min(BOUND, player.position.x));
+						player.position.z = Math.max(-BOUND, Math.min(BOUND, player.position.z));
+						player.rotation.y = Math.atan2(move.x, move.z) + FACING;
+						setAction(keys.has("run") ? "sprint" : "walk");
+					} else {
+						setAction("idle");
+					}
+					updateProximity();
+				}
+
+				if (player) {
+					const desired = player.position.clone().add(CAMOFF);
+					camera.position.lerp(desired, 1 - Math.pow(0.0015, dt));
+					camera.lookAt(player.position.x, player.position.y + 1.4, player.position.z);
+				}
+				renderer.render(scene, camera);
+			}
+
+			function updateProximity() {
+				const prompt = document.getElementById("prompt") as HTMLElement;
+				active = null;
+				let best = 3.6;
+				for (const m of monuments) {
+					const d = player!.position.distanceTo(m.pos);
+					if (d < best) { best = d; active = m; }
+				}
+				if (active) {
+					prompt.hidden = false;
+					prompt.innerHTML = `Press <b>E</b> — ${active.label}`;
+				} else {
+					prompt.hidden = true;
+				}
+			}
+
+			// ── Input / panels ───────────────────────────────────────────
+			const KEYMAP: Record<string, string> = {
+				arrowup: "f", w: "f", arrowdown: "b", s: "b",
+				arrowleft: "l", a: "l", arrowright: "r", d: "r", shift: "run",
+			};
+
+			function bindInput() {
+				window.addEventListener("keydown", (e) => {
+					const k = e.key.toLowerCase();
+					if (k in KEYMAP) { keys.add(KEYMAP[k]); e.preventDefault(); }
+					if ((k === "e" || k === "enter") && active && !panelOpen) openPanel(active.section);
+					if (k === "escape") closePanel();
+				});
+				window.addEventListener("keyup", (e) => {
+					const k = e.key.toLowerCase();
+					if (k in KEYMAP) keys.delete(KEYMAP[k]);
+				});
+				window.addEventListener("blur", () => keys.clear());
+
+				document.getElementById("backdrop")?.addEventListener("click", closePanel);
+				document.querySelectorAll<HTMLButtonElement>(".panel-close").forEach((b) =>
+					b.addEventListener("click", closePanel)
+				);
+			}
+
+			function openPanel(section: Section) {
+				const panel = document.getElementById("panel-" + section);
+				const backdrop = document.getElementById("backdrop");
+				if (!panel || !backdrop) return;
+				panelOpen = true;
+				keys.clear();
+				setAction("idle");
+				(document.getElementById("prompt") as HTMLElement).hidden = true;
+				document.querySelectorAll(".panel").forEach((p) => ((p as HTMLElement).hidden = true));
+				backdrop.hidden = false;
+				panel.hidden = false;
+				panel.scrollTop = 0;
+				gtagEvent("demo_object_click", { section });
+			}
+
+			function closePanel() {
+				panelOpen = false;
+				document.getElementById("backdrop")!.hidden = true;
+				document.querySelectorAll(".panel").forEach((p) => ((p as HTMLElement).hidden = true));
+			}
+
+			// ── Lifecycle ────────────────────────────────────────────────
+			function onResize() {
+				camera.aspect = window.innerWidth / window.innerHeight;
+				camera.updateProjectionMatrix();
+				renderer.setSize(window.innerWidth, window.innerHeight);
+			}
+			function hideLoading() { document.getElementById("loading")?.classList.add("hidden"); }
+			function showFallback() {
+				document.getElementById("loading")?.classList.add("hidden");
+				const fb = document.getElementById("fallback");
+				if (fb) fb.hidden = false;
+			}
+			function cleanup() {
+				disposed = true;
+				cancelAnimationFrame(raf);
+				window.removeEventListener("resize", onResize);
+				renderer?.dispose();
+			}
+
+			document.addEventListener("astro:page-load", () => { disposed = false; init(); });
+			document.addEventListener("astro:before-swap", cleanup);
+		</script>
+	</body>
+</html>
