@@ -19,6 +19,22 @@ const { contact } = Astro.props;
 		<span class="block" style="color: #2e2e2e">TOGETHER</span>
 	</h2>
 
+	<p data-animate class="mt-6 max-w-xl text-sm leading-relaxed text-[#888888]">{contact.message}</p>
+
+	<!-- Booking: Google Calendar appointment schedule embed -->
+	{contact.bookingUrl && (
+		<div id="book" data-animate data-delay="1" class="mt-10">
+			<h3 class="text-xs font-medium uppercase tracking-wider text-[#888888]">Book a call</h3>
+			<iframe
+				src={contact.bookingUrl}
+				title="Book a call with Htet Wai Yan"
+				loading="lazy"
+				class="mt-3 h-[640px] w-full rounded-xl border border-[#1c1c1c] bg-white"
+			></iframe>
+			<p class="mt-10 pt-10 text-xs font-medium uppercase tracking-wider text-[#888888]">Or send a message</p>
+		</div>
+	)}
+
 	<!-- Form -->
 	<form
 		id="contact-form"

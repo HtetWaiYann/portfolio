@@ -43,6 +43,15 @@ const { hero, contact } = Astro.props;
 			<!-- Bio -->
 			<p class="mt-3 text-sm leading-relaxed text-[#888888] my-4!">{hero.heroSummary}</p>
 
+			{contact.bookingUrl && (
+				<a
+					href="#book"
+					class="mt-2 inline-block rounded-full bg-[#e85d1c] px-5 py-2.5 text-sm font-semibold text-white transition duration-200 hover:bg-[#d44f0f]"
+				>
+					Book a free call
+				</a>
+			)}
+
 			<!-- Social links -->
 			<div class="mt-8 flex justify-center gap-3">
 				<a
