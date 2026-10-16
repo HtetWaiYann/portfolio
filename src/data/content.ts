@@ -44,12 +44,13 @@ export type Contact = {
 	github: string;
 	location: string;
 	availability: string;
+	bookingUrl?: string;
 };
 
 export const hero: HeroContent = {
 	name: "Htet Wai Yan",
-	title: "Full Stack Developer",
-	heroSummary: "A full stack developer with a passion for building web applications",
+	title: "Freelance Full Stack Developer",
+	heroSummary: "Freelance full stack developer helping teams ship fast, reliable web apps",
 	summary:
 		"A developer who enjoys building modern web applications and turning ideas into real products. I like working across the whole stack, from creating clean user interfaces to building APIs and deploying systems to the cloud. I’m always interested in learning how technologies work under the hood and improving how applications perform and scale.",
 	image: "/avatar.png",
@@ -64,7 +65,7 @@ export const hero: HeroContent = {
 export const about: string[] = [
 	"Hi, I'm Htet Wai Yan, a full-stack developer with over 5 years of experience building web applications. I've worked with technologies like Angular, React, Next.js, Vue, and Svelte on the frontend, and Node.js on the backend. I also have experience working with AWS and deploying production-level applications.",
 	"In my previous roles, I worked on systems used by thousands of daily users and built features like payment integrations, cloud infrastructure, and CI/CD pipelines. I enjoy solving real problems and building products that people actually use.",
-	"Currently I'm working as a freelance developer, but I'm interested in joining a larger company where I can collaborate with a strong engineering team, learn from experienced developers, and work on bigger products.",
+	"I now work as a freelance developer with startups and agencies — from new MVPs and site migrations to adding features, payments, and cloud deployments to existing products. If you have a project in mind, book a free call and let's talk it through.",
 ];
 
 export const experiences: Experience[] = [
@@ -171,11 +172,13 @@ export const education: Education[] = [
 
 export const contact: Contact = {
 	message:
-		"Let's collaborate on user-focused products with robust engineering foundations. I respond quickly via email or LinkedIn.",
+		"Have a project in mind? Book a free 30-minute call, or send a message and I'll reply within a day.",
 	email: "hwy.dev@gmail.com",
 	phone: "+66 62 815 2947",
 	linkedin: "https://www.linkedin.com/in/htet-waiyan",
 	github: "https://github.com/HtetWaiYann",
 	location: "Based in Chiang Mai, Thailand (Huaykaew Place)",
-	availability: "Available for full-stack and cloud-focused roles",
+	availability: "Available for freelance projects",
+	// Google Calendar → Appointment schedule → Share → "Website embed" → copy the iframe src.
+	bookingUrl: "https://calendar.google.com/calendar/appointments/schedules/AcZssZ2FZ_vPGN2WHnbwsvQpt4_XnwhXJaC-SJYepymiVDNo3yWKK1pc4uI2EenhAX6JcDB6AUy2oldu?gv=true",
 };
