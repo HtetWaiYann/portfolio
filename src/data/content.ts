@@ -53,7 +53,7 @@ export const hero: HeroContent = {
 	heroSummary: "Freelance full stack developer helping teams ship fast, reliable web apps",
 	summary:
 		"A developer who enjoys building modern web applications and turning ideas into real products. I like working across the whole stack, from creating clean user interfaces to building APIs and deploying systems to the cloud. I’m always interested in learning how technologies work under the hood and improving how applications perform and scale.",
-	image: "/avatar.png",
+	image: "/avatar-sm.webp",
 	imageAlt: "Portrait of Htet Wai Yan",
 	highlights: [
 		{ label: "Years of Experience", value: "5+" },
@@ -121,7 +121,7 @@ export const projects: Project[] = [
 			"Built with React 19, React Flow, Zustand, and Tailwind on the frontend; Node.js, Express, Prisma, and PostgreSQL on the backend.",
 		],
 		link: { label: "View on GitHub →", href: "https://github.com/HtetWaiYann/workflow-builder" },
-		images: ["/projects/triggr-1.png", "/projects/triggr-2.png"],
+		images: ["/projects/triggr-1.webp", "/projects/triggr-2.webp"],
 	},
 	{
 		title: "ATS-Ready Resume",
@@ -132,7 +132,7 @@ export const projects: Project[] = [
 			"Edit, import, and export entirely in your browser with no account or server required, keeping your resume data on your device",
 		],
 		link: { label: "Visit project →", href: "https://resume.htetwaiyan.com" },
-		images: ["/projects/ats-1.png", "/projects/ats-2.png"],
+		images: ["/projects/ats-1.webp", "/projects/ats-2.webp"],
 	},
 	{
 		title: "RELAX",
@@ -142,7 +142,7 @@ export const projects: Project[] = [
 			"The architecture is what I care about here — the contract-first boundary, the locked-down Electron layer, the interface-driven backend",
 		],
 		link: { label: "Visit project →", href: "https://relax.htetwaiyan.com" },
-		images: ["/projects/relax-1.png", "/projects/relax-2.png"],
+		images: ["/projects/relax-1.webp", "/projects/relax-2.webp"],
 	},
 ];
 
