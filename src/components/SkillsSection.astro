@@ -8,38 +8,28 @@ interface Props {
 const { skills } = Astro.props;
 
 const groups = [
-	{ title: "Front-end", items: skills.frontend },
-	{ title: "Back-end", items: skills.backend },
-	{ title: "Databases", items: skills.databases },
-	{ title: "Cloud & DevOps", items: skills.cloudDevops },
-	{ title: "Certifications", items: skills.certifications },
-	{ title: "Languages", items: skills.languages },
+	{ title: "Front-end", items: skills.frontend, span: "lg:col-span-7" },
+	{ title: "Back-end", items: skills.backend, span: "lg:col-span-5" },
+	{ title: "Databases", items: skills.databases, span: "lg:col-span-4" },
+	{ title: "Cloud & DevOps", items: skills.cloudDevops, span: "lg:col-span-8" },
+	{ title: "Certifications", items: skills.certifications, span: "lg:col-span-7" },
+	{ title: "Languages", items: skills.languages, span: "lg:col-span-5" },
 ];
 ---
 
 <section id="skills" class="section wrap">
-	<p class="section-label" data-reveal>(04) Toolbox</p>
-	<h2 data-split class="display mt-6">
-		<span class="block">Skills</span>
-		<span class="block ghost">& Tools</span>
-	</h2>
+	<span class="eyebrow" data-reveal>04 — Toolbox</span>
+	<h2 data-split class="heading mt-6">Skills &amp; tools</h2>
 
-	<div class="mt-20 grid border-l border-t border-[#1c1c1c] sm:grid-cols-2 lg:grid-cols-3">
+	<div class="mt-14 grid gap-x-10 gap-y-12 sm:grid-cols-2 lg:grid-cols-12">
 		{groups.map((group, i) => (
-			<div data-reveal class="group relative overflow-hidden border-b border-r border-[#1c1c1c] p-8">
-				<div class="absolute inset-0 origin-bottom scale-y-0 bg-[#e85d1c]/[0.06] transition-transform duration-500 ease-out group-hover:scale-y-100" aria-hidden="true"></div>
-				<div class="relative">
-					<div class="flex items-baseline justify-between">
-						<h3 class="text-[11px] font-semibold uppercase tracking-widest text-[#e85d1c]">{group.title}</h3>
-						<span class="text-xs text-[#333]">0{i + 1}</span>
-					</div>
-					<div class="mt-6 flex flex-wrap gap-2">
-						{group.items.map((skill) => (
-							<span class="rounded-full border border-[#222] bg-[#111] px-3 py-1 text-xs text-[#999] transition-colors duration-200 hover:border-[#e85d1c]/50 hover:text-white">
-								{skill}
-							</span>
-						))}
-					</div>
+			<div class={`skill-group border-t border-white/10 pt-6 ${group.span}`}>
+				<div class="flex items-baseline justify-between">
+					<h3 class="text-[11px] font-semibold uppercase tracking-widest text-accent">{group.title}</h3>
+					<span class="font-display text-sm text-white/20">0{i + 1}</span>
+				</div>
+				<div class="mt-6 flex flex-wrap gap-2">
+					{group.items.map((skill) => <span class="chip">{skill}</span>)}
 				</div>
 			</div>
 		))}

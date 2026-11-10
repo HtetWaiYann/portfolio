@@ -9,67 +9,56 @@ interface Props {
 const { projects } = Astro.props;
 ---
 
-<section id="projects">
-	<div class="wrap pb-12">
-		<p class="section-label" data-reveal>(02) Selected work</p>
-		<h2 data-split class="display mt-6">
-			<span class="block">Recent</span>
-			<span class="block ghost">Projects</span>
-		</h2>
-	</div>
+<section id="projects" class="section wrap">
+	<span class="eyebrow" data-reveal>02 — Selected work</span>
+	<h2 data-split class="heading mt-6">Recent projects</h2>
 
-	<!-- Pinned + scrolled horizontally on desktop (motion.ts); plain vertical stack on mobile. -->
-	<div id="projects-pin" class="overflow-hidden min-[900px]:flex min-[900px]:h-svh min-[900px]:flex-col min-[900px]:justify-center">
-		<div class="projects-track flex flex-col gap-16 px-[var(--gutter)] pl-[max(var(--gutter),var(--rail))] min-[900px]:w-max min-[900px]:flex-row min-[900px]:gap-[6vw] min-[900px]:pr-[20vw]">
-			{projects.map((project, i) => {
-				const Tag = project.link ? 'a' : 'div';
-				return (
-					<Tag
-						href={project.link?.href}
-						target={project.link ? "_blank" : undefined}
-						rel={project.link ? "noreferrer noopener" : undefined}
-						aria-label={project.link ? `Visit ${project.title}` : undefined}
-						class="project-panel group grid gap-8 min-[900px]:h-[78svh] min-[900px]:w-[min(78vw,1180px)] min-[900px]:grid-cols-[1fr_1.15fr] min-[900px]:items-center"
-					>
-						<div class="project-copy min-w-0">
-							<p class="text-[clamp(64px,9vw,140px)] font-black leading-none text-transparent [-webkit-text-stroke:1.5px_#333] transition-colors duration-500 group-hover:[-webkit-text-stroke-color:#e85d1c]" style="font-family: 'Space Grotesk', sans-serif">
-								0{i + 1}
-							</p>
-							<h3 class="mt-4 flex items-center gap-3 text-3xl font-bold leading-tight text-white sm:text-4xl">
-								{project.title}
-								<Icon name="lucide:arrow-up-right" width="28" height="28" class="text-[#e85d1c] transition-transform duration-300 group-hover:-translate-y-1 group-hover:translate-x-1" />
-							</h3>
-							<p class="mt-4 text-sm leading-relaxed text-[#888888]">{project.description}</p>
-							{project.points.length > 0 && (
-								<ul class="mt-5 space-y-2">
-									{project.points.map((point) => (
-										<li class="flex gap-2 text-[13px] text-[#666666]">
-											<span class="mt-2 inline-block h-1 w-1 shrink-0 rounded-full bg-[#e85d1c]/70"></span>
-											<span class="leading-relaxed">{point}</span>
-										</li>
-									))}
-								</ul>
-							)}
-						</div>
+	<!-- Panels stick and stack on desktop (sizes in global.css, motion in motion.ts) -->
+	<div class="mt-14 space-y-16 lg:space-y-[18vh] lg:pb-[6vh]">
+		{projects.map((project, i) => (
+			<article style={`--i: ${i}`} class="project-panel relative origin-top border-t border-white/10 pt-8 lg:grid lg:grid-cols-12 lg:gap-10 lg:pb-8">
+				<div class="project-dim pointer-events-none absolute inset-0 z-10 bg-ink opacity-0" aria-hidden="true"></div>
 
-						{project.images && project.images.length > 0 && (
-							<div class="relative grid gap-4 min-[900px]:h-full min-[900px]:grid-rows-2">
-								{project.images.map((image) => (
-									<div class="overflow-hidden rounded-2xl border border-[#1c1c1c] bg-[#111]">
-										<img
-											src={image}
-											alt={`${project.title} screenshot`}
-											loading="lazy"
-											class="project-img aspect-video w-full object-cover object-top min-[900px]:aspect-auto min-[900px]:h-full"
-										/>
-									</div>
-								))}
-							</div>
+				<div class="flex flex-col lg:col-span-4">
+					<div class="flex items-center justify-between">
+						<span class="font-display text-sm font-bold text-accent">0{i + 1} / 0{projects.length}</span>
+						{project.link && (
+							<a
+								href={project.link.href}
+								target="_blank"
+								rel="noreferrer noopener"
+								aria-label={`Visit ${project.title}`}
+								data-magnetic
+								class="flex h-11 w-11 items-center justify-center rounded-full bg-white text-ink transition-colors hover:bg-accent hover:text-white"
+							>
+								<Icon name="lucide:arrow-up-right" width="18" height="18" />
+							</a>
 						)}
-					</Tag>
-				);
-			})}
-		</div>
+					</div>
+					<h3 class="font-display mt-6 text-4xl font-bold uppercase leading-none tracking-tight sm:text-5xl">{project.title}</h3>
+					<p class="mt-5 text-sm leading-relaxed text-muted">{project.description}</p>
+					{project.points.length > 0 && (
+						<ul class="mt-5 space-y-2.5">
+							{project.points.map((point) => (
+								<li class="flex gap-2.5 text-[13px] leading-relaxed text-[#9a9a9a]">
+									<span class="mt-2 h-1 w-1 shrink-0 rounded-full bg-accent"></span>{point}
+								</li>
+							))}
+						</ul>
+					)}
+				</div>
 
+				{project.images && project.images.length > 0 && (
+					<div data-tilt class="project-shots mt-8 flex flex-col items-center justify-center gap-4 lg:col-span-8 lg:mt-0 lg:h-full">
+						{project.images.map((image, j) => (
+							<div class="frame w-full">
+								<div class="frame-bar" aria-hidden="true"><span></span><span></span><span></span></div>
+								<img src={image} alt={`${project.title} screenshot ${j + 1}`} loading="lazy" decoding="async" width="1440" height="778" />
+							</div>
+						))}
+					</div>
+				)}
+			</article>
+		))}
 	</div>
 </section>

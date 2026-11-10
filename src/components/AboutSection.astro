@@ -8,13 +8,19 @@ const [lead, ...rest] = about;
 ---
 
 <section id="about" class="section wrap">
-	<p class="section-label" data-reveal>(01) About me</p>
-	<p data-words class="mt-10 max-w-6xl text-[clamp(26px,3.6vw,56px)] font-semibold leading-[1.15] tracking-tight text-white">
-		{lead}
-	</p>
-	<div class="mt-16 grid gap-8 md:ml-auto md:max-w-3xl md:grid-cols-2">
-		{rest.map((paragraph) => (
-			<p data-reveal class="text-sm leading-relaxed text-[#888888]">{paragraph}</p>
-		))}
+	<span class="eyebrow" data-reveal>01 — About</span>
+	<h2 data-split class="heading mt-6">Who I am</h2>
+
+	<div class="mt-14 grid gap-12 lg:grid-cols-12">
+		<div class="lg:col-span-8">
+			<p data-words class="text-[clamp(24px,3vw,46px)] font-semibold leading-[1.25] tracking-tight">{lead}</p>
+		</div>
+		<div class="space-y-8 lg:col-span-4 lg:pt-2">
+			{rest.map((paragraph) => (
+				<div data-reveal class="border-t border-white/10 pt-5">
+					<p class="text-sm leading-relaxed text-muted">{paragraph}</p>
+				</div>
+			))}
+		</div>
 	</div>
 </section>

@@ -9,35 +9,39 @@ const { experiences } = Astro.props;
 ---
 
 <section id="experience" class="section wrap">
-	<p class="section-label" data-reveal>(03) Experience</p>
-	<h2 data-split class="display mt-6">
-		<span class="block">5+ Years of</span>
-		<span class="block ghost">Experience</span>
-	</h2>
+	<span class="eyebrow" data-reveal>03 — Experience</span>
+	<h2 data-split class="heading mt-6">5+ years of work</h2>
 
-	<div class="timeline relative mt-20 pl-8 sm:pl-12">
-		<div class="absolute bottom-0 left-0 top-0 w-px bg-[#1c1c1c]" aria-hidden="true">
-			<div class="timeline-progress h-full w-px origin-top bg-[#e85d1c]"></div>
+	<div class="timeline relative mt-14 pl-8 sm:pl-12">
+		<div class="absolute bottom-0 left-0 top-0 w-px bg-white/10" aria-hidden="true">
+			<div class="timeline-progress h-full w-px origin-top bg-accent"></div>
 		</div>
 
-		{experiences.map((item) => (
-			<div class="timeline-item relative grid gap-4 pb-20 last:pb-0 md:grid-cols-[220px_1fr] md:gap-12">
-				<span class="timeline-dot absolute -left-8 top-2 h-2.5 w-2.5 -translate-x-1/2 rounded-full bg-[#333] sm:-left-12" aria-hidden="true"></span>
-				<p class="text-sm font-semibold uppercase tracking-widest text-[#e85d1c]">{item.period}</p>
-				<div>
-					<h3 class="text-2xl font-semibold leading-tight text-white sm:text-3xl [&_a]:text-[#e85d1c] [&_a]:underline-offset-4 [&_a:hover]:underline">
-						<Fragment set:html={item.title} />
-					</h3>
-					<ul class="mt-6 space-y-2.5">
-						{item.bullets.map((bullet) => (
-							<li class="flex gap-3 text-sm text-[#888888]">
-								<span class="mt-2 inline-block h-1 w-1 shrink-0 rounded-full bg-[#e85d1c]/70"></span>
-								<span class="leading-relaxed">{bullet}</span>
-							</li>
-						))}
-					</ul>
-				</div>
-			</div>
-		))}
+		<div>
+			{experiences.map((item) => {
+				const [role, ...company] = item.title.split(" · ");
+				return (
+					<div class="timeline-item group relative">
+						<span class="timeline-dot absolute -left-8 top-10 h-3 w-3 -translate-x-1/2 rounded-full border-2 border-ink bg-[#333] transition-colors duration-500 group-[.is-active]:bg-accent sm:-left-12" aria-hidden="true"></span>
+						<div class="grid gap-6 border-t border-white/10 py-9 md:grid-cols-12">
+							<div class="md:col-span-5">
+								<p class="text-xs font-semibold uppercase tracking-widest text-accent">{item.period}</p>
+								<h3 class="mt-4 text-2xl font-semibold leading-tight sm:text-3xl">{role}</h3>
+								<p class="mt-2 text-sm text-muted [&_a]:text-accent [&_a]:underline-offset-4 [&_a:hover]:underline">
+									<Fragment set:html={company.join(" · ")} />
+								</p>
+							</div>
+							<ul class="space-y-2.5 md:col-span-7">
+								{item.bullets.map((bullet) => (
+									<li class="flex gap-3 text-sm leading-relaxed text-[#9a9a9a]">
+										<span class="mt-2 h-1 w-1 shrink-0 rounded-full bg-accent"></span>{bullet}
+									</li>
+								))}
+							</ul>
+						</div>
+					</div>
+				);
+			})}
+		</div>
 	</div>
 </section>
