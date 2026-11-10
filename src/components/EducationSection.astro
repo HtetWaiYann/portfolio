@@ -8,22 +8,23 @@ interface Props {
 const { education } = Astro.props;
 ---
 
-<section id="education">
-	<h2 class="font-black uppercase leading-none tracking-tight mb-4" data-animate style="font-size: clamp(40px, 5.5vw, 68px)">
-		<span class="block text-white">EDUCATION</span>
-		<span class="block" style="color: #2e2e2e">& LEARNING</span>
+<section id="education" class="section wrap">
+	<p class="section-label" data-reveal>(05) Education</p>
+	<h2 data-split class="display mt-6">
+		<span class="block">Education</span>
+		<span class="block ghost">& Learning</span>
 	</h2>
 
-	<div class="mt-10 divide-y divide-[#1c1c1c]">
-		{education.map((item, i) => (
-			<div
-				data-animate
-				data-delay={Math.min(i + 1, 5)}
-				class="py-7 transition-colors duration-200 hover:bg-[#0e0e0e] -mx-3 px-3 rounded-xl"
-			>
-				<h3 class="text-base font-semibold leading-snug text-white mb-4">{item.title}</h3>
-				<p class="mt-2.5 text-xs text-[#555555]">{item.period}</p>
-			</div>
-		))}
+	<div class="mt-16 border-t border-[#1c1c1c]">
+		{education.map((item) => {
+			const [degree, school] = item.title.split(" · ");
+			return (
+				<div data-reveal class="group grid gap-2 border-b border-[#1c1c1c] py-8 transition-[padding] duration-500 hover:pl-4 md:grid-cols-[1.3fr_1fr_auto] md:items-center md:gap-8">
+					<h3 class="text-xl font-semibold text-white transition-colors group-hover:text-[#e85d1c] sm:text-2xl">{degree}</h3>
+					<p class="text-sm text-[#888]">{school}</p>
+					<p class="text-xs text-[#555] md:text-right">{item.period}</p>
+				</div>
+			);
+		})}
 	</div>
 </section>

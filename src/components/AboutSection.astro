@@ -4,20 +4,17 @@ interface Props {
 }
 
 const { about } = Astro.props;
+const [lead, ...rest] = about;
 ---
 
-<section id="about">
-	<h2
-		data-animate
-		class="font-black uppercase leading-none tracking-tight"
-		style="font-size: clamp(40px, 5.5vw, 68px)"
-	>
-		<span class="block text-white">ABOUT</span>
-		<span class="block" style="color: #2e2e2e">ME</span>
-	</h2>
-	<div class="mt-8 max-w-2xl space-y-4" data-animate data-delay="1">
-		{about.map((paragraph) => (
-			<p class="text-sm leading-relaxed text-[#888888] mb-4!">{paragraph}</p>
+<section id="about" class="section wrap">
+	<p class="section-label" data-reveal>(01) About me</p>
+	<p data-words class="mt-10 max-w-6xl text-[clamp(26px,3.6vw,56px)] font-semibold leading-[1.15] tracking-tight text-white">
+		{lead}
+	</p>
+	<div class="mt-16 grid gap-8 md:ml-auto md:max-w-3xl md:grid-cols-2">
+		{rest.map((paragraph) => (
+			<p data-reveal class="text-sm leading-relaxed text-[#888888]">{paragraph}</p>
 		))}
 	</div>
 </section>
