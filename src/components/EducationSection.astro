@@ -1,4 +1,5 @@
 ---
+import { Icon } from 'astro-icon/components';
 import type { Education } from "../data/content";
 
 interface Props {
@@ -8,22 +9,25 @@ interface Props {
 const { education } = Astro.props;
 ---
 
-<section id="education">
-	<h2 class="font-black uppercase leading-none tracking-tight mb-4" data-animate style="font-size: clamp(40px, 5.5vw, 68px)">
-		<span class="block text-white">EDUCATION</span>
-		<span class="block" style="color: #2e2e2e">& LEARNING</span>
-	</h2>
+<section id="education" class="section wrap">
+	<span class="eyebrow" data-reveal>05 — Education</span>
+	<h2 data-split class="heading mt-6">Learning</h2>
 
-	<div class="mt-10 divide-y divide-[#1c1c1c]">
-		{education.map((item, i) => (
-			<div
-				data-animate
-				data-delay={Math.min(i + 1, 5)}
-				class="py-7 transition-colors duration-200 hover:bg-[#0e0e0e] -mx-3 px-3 rounded-xl"
-			>
-				<h3 class="text-base font-semibold leading-snug text-white mb-4">{item.title}</h3>
-				<p class="mt-2.5 text-xs text-[#555555]">{item.period}</p>
-			</div>
-		))}
+	<div class="edu-grid mt-14 grid gap-10 md:grid-cols-3">
+		{education.map((item) => {
+			const [degree, school] = item.title.split(" · ");
+			return (
+				<div class="edu-card flex flex-col gap-8 border-t border-white/10 pt-6">
+					<span class="flex h-11 w-11 items-center justify-center rounded-full bg-accent/15 text-accent">
+						<Icon name="lucide:graduation-cap" width="20" height="20" />
+					</span>
+					<div>
+						<h3 class="text-xl font-semibold leading-snug">{degree}</h3>
+						<p class="mt-2 text-sm text-muted">{school}</p>
+						<p class="mt-5 text-xs text-white/40">{item.period}</p>
+					</div>
+				</div>
+			);
+		})}
 	</div>
 </section>

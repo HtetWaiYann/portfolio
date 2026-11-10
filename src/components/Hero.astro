@@ -1,85 +1,98 @@
 ---
 import { Icon } from 'astro-icon/components';
-import type { Contact, HeroContent } from "../data/content";
+import type { Contact, HeroContent, SkillGroups } from "../data/content";
 
 interface Props {
 	hero: HeroContent;
 	contact: Contact;
+	skills: SkillGroups;
 }
 
-const { hero, contact } = Astro.props;
+const { hero, contact, skills } = Astro.props;
+
+const socials = [
+	{ href: contact.linkedin, icon: "lucide:linkedin", label: "LinkedIn", external: true },
+	{ href: contact.github, icon: "lucide:github", label: "GitHub", external: true },
+	{ href: `mailto:${contact.email}`, icon: "lucide:mail", label: "Email", external: false },
+];
+const [years, users, stacks] = hero.highlights;
+const tech = [...skills.frontend, ...skills.backend, ...skills.cloudDevops];
 ---
 
-<!-- Wrapper allows dashed rings to bleed outside the card -->
-<div class="relative" data-animate>
-	<!-- Dashed decorative rings -->
-	<div
-		class="pointer-events-none absolute rounded-full border-2 border-dashed border-[#e85d1c]/55"
-		style="width: 280px; height: 280px; top: -22px; left: -22px; z-index: 1"
-	></div>
-	<div
-		class="pointer-events-none absolute rounded-full border-2 border-dashed border-[#e85d1c]/25"
-		style="width: 180px; height: 180px; bottom: 30px; left: -14px; z-index: 1"
-	></div>
-
-	<!-- Card -->
-	<div class="relative overflow-hidden rounded-3xl bg-white shadow-2xl shadow-black/30" style="z-index: 2">
-		<!-- Portrait photo -->
-		<div class="mx-auto lg:mx-5 w-[200px] lg:w-auto mt-5 overflow-hidden rounded-2xl bg-[#e85d1c]" style="height: 220px">
-			<img
-				class="h-full w-full object-cover object-top"
-				src={hero.image}
-				alt={hero.imageAlt}
-				width="240"
-				height="220"
-				loading="eager"
-			/>
-		</div>
-
-		<!-- Info -->
-		<div class="px-6 pb-7 pt-5 text-center">
-			<p class="text-2xl font-bold leading-tight text-[#0a0a0a]">{hero.name}</p>
-
-			<!-- Bio -->
-			<p class="mt-3 text-sm leading-relaxed text-[#888888] my-4!">{hero.heroSummary}</p>
-
-			{contact.bookingUrl && (
-				<a
-					href="#book"
-					class="mt-2 inline-block rounded-full bg-[#e85d1c] px-5 py-2.5 text-sm font-semibold text-white transition duration-200 hover:bg-[#d44f0f]"
-				>
-					Book a free call
-				</a>
-			)}
-
-			<!-- Social links -->
-			<div class="mt-8 flex justify-center gap-3">
-				<a
-					href={contact.linkedin}
-					target="_blank"
-					rel="noreferrer"
-					aria-label="LinkedIn"
-					class="flex h-9 w-9 cursor-pointer items-center justify-center rounded-full border border-[#f0e8e4] bg-[#fdf3ee] transition-all duration-200 hover:bg-[#fce4d4] hover:-translate-y-0.5"
-				>
-					<Icon name="lucide:linkedin" width="16" height="16" class="text-[#e85d1c]" />
-				</a>
-				<a
-					href={contact.github}
-					target="_blank"
-					rel="noreferrer"
-					aria-label="GitHub"
-					class="flex h-9 w-9 cursor-pointer items-center justify-center rounded-full border border-[#f0e8e4] bg-[#fdf3ee] transition-all duration-200 hover:bg-[#fce4d4] hover:-translate-y-0.5"
-				>
-					<Icon name="lucide:github" width="16" height="16" class="text-[#e85d1c]" />
-				</a>
-				<a
-					href={`tel:${contact.phone.replace(/\s+/g, "")}`}
-					aria-label="Phone"
-					class="flex h-9 w-9 cursor-pointer items-center justify-center rounded-full border border-[#f0e8e4] bg-[#fdf3ee] transition-all duration-200 hover:bg-[#fce4d4] hover:-translate-y-0.5"
-				>
-					<Icon name="lucide:phone" width="16" height="16" class="text-[#e85d1c]"/>
+<section id="intro" class="flex min-h-svh flex-col justify-center gap-14 pt-12 pb-8">
+	<!-- data-speed: how fast each block drifts away on scroll (motion.ts) -->
+	<div class="wrap grid w-full gap-12 lg:grid-cols-12 lg:items-end">
+		<div data-speed="0.6" class="hero-block lg:col-span-8">
+			<span class="eyebrow">Freelance · {contact.location.split(" (")[0].replace("Based in ", "")}</span>
+			<h1 class="hero-title heading mt-8 text-[clamp(56px,9vw,150px)]!">
+				Full stack<br /><span class="text-accent">developer</span>
+			</h1>
+			<p class="mt-8 max-w-xl text-sm leading-relaxed text-muted sm:text-base">{hero.heroSummary}. {hero.summary.split(". ")[0]}.</p>
+			<div class="mt-8 flex flex-wrap gap-3">
+				{contact.bookingUrl && (
+					<button type="button" data-book data-magnetic class="rounded-full bg-accent px-6 py-3 text-sm font-semibold text-white transition-colors hover:bg-[#d44f0f]">
+						Book a free call →
+					</button>
+				)}
+				<a data-magnetic href="/HtetWaiYan_Resume.pdf" download class="inline-flex items-center gap-2 rounded-full border border-white/15 px-6 py-3 text-sm font-semibold transition-colors hover:border-white/40">
+					<Icon name="lucide:download" width="16" height="16" /> Download CV
 				</a>
 			</div>
 		</div>
+
+		<div class="space-y-10 lg:col-span-4">
+			<!-- Profile: avatar kept small on purpose (source photo is 797px) -->
+			<div data-speed="1.4" class="hero-block flex items-center gap-5">
+				<div class="relative h-20 w-20 shrink-0">
+					<div class="hero-ring absolute -inset-2 rounded-full border border-dashed border-accent/60" aria-hidden="true"></div>
+					<img src={hero.image} alt={hero.imageAlt} width="80" height="80" loading="eager" class="h-20 w-20 rounded-full bg-accent object-cover object-top" />
+				</div>
+				<div>
+					<p class="text-lg font-semibold leading-tight">{hero.name}</p>
+					<p class="mt-1 flex items-center gap-2 text-xs text-muted">
+						<span class="relative flex h-2 w-2">
+							<span class="absolute inline-flex h-full w-full animate-ping rounded-full bg-green-400 opacity-60"></span>
+							<span class="relative inline-flex h-2 w-2 rounded-full bg-green-400"></span>
+						</span>
+						{contact.availability}
+					</p>
+					<div class="mt-3 flex gap-2">
+						{socials.map((s) => (
+							<a
+								data-magnetic
+								href={s.href}
+								target={s.external ? "_blank" : undefined}
+								rel={s.external ? "noreferrer" : undefined}
+								aria-label={s.label}
+								class="flex h-8 w-8 items-center justify-center rounded-full border border-white/10 text-muted transition-colors hover:border-accent hover:text-white"
+							>
+								<Icon name={s.icon} width="14" height="14" />
+							</a>
+						))}
+					</div>
+				</div>
+			</div>
+
+			<dl class="grid grid-cols-2 gap-6">
+				{[years, users].map((stat, i) => (
+					<div data-speed={i ? "2" : "1.7"} class="hero-block border-t border-white/10 pt-4">
+						<dd data-count class="font-display text-5xl font-bold sm:text-6xl">{stat.value}</dd>
+						<dt class="mt-2 text-[10px] font-semibold uppercase tracking-widest text-muted">{stat.label}</dt>
+					</div>
+				))}
+			</dl>
+		</div>
 	</div>
-</div>
+
+	<!-- Stack marquee, full bleed between two rules -->
+	<div data-speed="0.9" class="hero-block border-y border-white/10 py-6">
+		<p class="wrap text-[10px] font-semibold uppercase tracking-widest text-muted">{stacks.label} — {stacks.value}</p>
+		<div data-marquee class="mt-4 overflow-hidden whitespace-nowrap [mask-image:linear-gradient(90deg,transparent,#000_8%,#000_92%,transparent)]" aria-hidden="true">
+			<div class="inline-flex w-max">
+				{[0, 1].map(() => tech.map((t) => (
+					<span class="font-display px-6 text-4xl font-bold uppercase text-white/85 sm:text-6xl">{t}<span class="pl-12 text-accent">✦</span></span>
+				)))}
+			</div>
+		</div>
+	</div>
+</section>

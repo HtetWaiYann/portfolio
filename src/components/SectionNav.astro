@@ -1,0 +1,80 @@
+---
+import { Icon } from 'astro-icon/components';
+
+const links = [
+	{ href: "#intro", icon: "lucide:house", label: "Home" },
+	{ href: "#about", icon: "lucide:user", label: "About" },
+	{ href: "#projects", icon: "lucide:folder", label: "Projects" },
+	{ href: "#experience", icon: "lucide:briefcase", label: "Experience" },
+	{ href: "#skills", icon: "lucide:wrench", label: "Skills" },
+	{ href: "#contact", icon: "lucide:square-pen", label: "Contact" },
+];
+---
+
+<!-- Left rail on desktop, bottom bar on phones (a left rail would sit on top of the 16px gutter). -->
+<nav
+	class="fixed bottom-4 left-1/2 z-50 -translate-x-1/2 md:bottom-auto md:left-6 md:top-1/2 md:-translate-y-1/2 md:translate-x-0"
+	aria-label="Section navigation"
+>
+	<div class="dock relative flex gap-1 rounded-full border border-white/[0.07] bg-[#141414]/85 p-1.5 shadow-2xl shadow-black/60 backdrop-blur-xl md:flex-col">
+		<span class="dock-indicator absolute left-1.5 top-1.5 h-10 w-10 rounded-full bg-[#e85d1c]" aria-hidden="true"></span>
+		{links.map((link, i) => (
+			<a
+				href={link.href}
+				data-nav={link.href.slice(1)}
+				data-i={i}
+				aria-label={link.label}
+				class="nav-link group relative flex h-10 w-10 items-center justify-center rounded-full text-[#777] transition-colors duration-300 hover:text-white"
+			>
+				<Icon name={link.icon} width="18" height="18" />
+				<span class="pointer-events-none absolute left-full ml-5 hidden -translate-x-2 whitespace-nowrap rounded-md border border-white/[0.07] bg-[#141414] px-2.5 py-1 text-[11px] font-semibold uppercase tracking-widest text-white opacity-0 transition duration-300 group-hover:translate-x-0 group-hover:opacity-100 group-focus-visible:translate-x-0 group-focus-visible:opacity-100 md:block">
+					<span class="mr-1.5 text-[#e85d1c]">0{i + 1}</span>{link.label}
+				</span>
+			</a>
+		))}
+	</div>
+</nav>
+
+<style>
+	/* 44px = 40px button + 4px gap; --i is set to the active link's index. */
+	.dock-indicator {
+		transform: translateX(calc(var(--i, 0) * 44px));
+		transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+	}
+	@media (min-width: 768px) {
+		.dock-indicator {
+			transform: translateY(calc(var(--i, 0) * 44px));
+		}
+	}
+	.nav-link.active {
+		color: #ffffff;
+	}
+</style>
+
+<script>
+	function initNav() {
+		const dock = document.querySelector<HTMLElement>(".dock");
+		const links = document.querySelectorAll<HTMLAnchorElement>(".nav-link");
+		const byId = new Map([...links].map((l) => [l.dataset.nav, l]));
+
+		const observer = new IntersectionObserver(
+			(entries) => {
+				entries.forEach((entry) => {
+					const link = byId.get(entry.target.id);
+					if (!entry.isIntersecting || !link) return;
+					links.forEach((l) => l.classList.remove("active"));
+					link.classList.add("active");
+					dock?.style.setProperty("--i", link.dataset.i ?? "0");
+				});
+			},
+			{ rootMargin: "-45% 0px -45% 0px" }
+		);
+
+		byId.forEach((_, id) => {
+			const section = id && document.getElementById(id);
+			if (section) observer.observe(section);
+		});
+	}
+
+	initNav();
+</script>

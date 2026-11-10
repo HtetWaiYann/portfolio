@@ -1,0 +1,61 @@
+---
+interface Props {
+	bookingUrl: string;
+}
+
+const { bookingUrl } = Astro.props;
+---
+
+<!-- Opened by any [data-book] button. data-lenis-prevent lets the calendar scroll natively. -->
+<dialog
+	id="book"
+	data-lenis-prevent
+	aria-label="Book a call"
+	class="m-auto w-[min(960px,calc(100vw-32px))] max-w-none overflow-hidden rounded-3xl border border-[#1c1c1c] bg-[#0f0f0f] p-0 text-white backdrop:bg-black/70 backdrop:backdrop-blur-sm"
+>
+	<div class="flex items-center justify-between gap-4 border-b border-[#1c1c1c] px-6 py-4">
+		<div>
+			<p class="text-sm font-semibold">Book a free 30-minute call</p>
+			<p class="text-xs text-[#888]">Pick a slot that works for you.</p>
+		</div>
+		<form method="dialog">
+			<button
+				aria-label="Close"
+				class="flex h-9 w-9 items-center justify-center rounded-full border border-[#2a2a2a] text-lg leading-none text-[#888] transition-colors hover:border-[#e85d1c] hover:text-white"
+			>×</button>
+		</form>
+	</div>
+	<iframe
+		src={bookingUrl}
+		title="Book a call with Htet Wai Yan"
+		loading="lazy"
+		class="block h-[min(680px,75svh)] w-full bg-white"
+	></iframe>
+</dialog>
+
+<style>
+	dialog[open] {
+		animation: book-in 0.45s cubic-bezier(0.16, 1, 0.3, 1);
+	}
+	dialog[open]::backdrop {
+		animation: book-fade 0.3s ease;
+	}
+	@keyframes book-in {
+		from { opacity: 0; transform: translateY(40px) scale(0.96); }
+	}
+	@keyframes book-fade {
+		from { opacity: 0; }
+	}
+	@media (prefers-reduced-motion: reduce) {
+		dialog[open], dialog[open]::backdrop { animation: none; }
+	}
+</style>
+
+<script>
+	const dialog = document.getElementById("book") as HTMLDialogElement;
+	document.addEventListener("click", (e) => {
+		if ((e.target as HTMLElement).closest("[data-book]")) dialog.showModal();
+		// Click on the backdrop (the dialog element itself, outside its content) closes it.
+		else if (e.target === dialog) dialog.close();
+	});
+</script>

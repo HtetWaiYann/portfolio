@@ -1,14 +1,13 @@
 ---
-import { ClientRouter } from "astro:transitions";
 import Hero from "../components/Hero.astro";
-import IntroPanel from "../components/IntroPanel.astro";
 import AboutSection from "../components/AboutSection.astro";
 import ExperienceSection from "../components/ExperienceSection.astro";
 import ProjectsSection from "../components/ProjectsSection.astro";
 import SkillsSection from "../components/SkillsSection.astro";
 import EducationSection from "../components/EducationSection.astro";
 import ContactSection from "../components/ContactSection.astro";
-import BottomNav from "../components/BottomNav.astro";
+import SectionNav from "../components/SectionNav.astro";
+import BookingModal from "../components/BookingModal.astro";
 import {
 	hero,
 	about,
@@ -81,7 +80,7 @@ import Analytics from '@vercel/analytics/astro'
 			gtag('config', 'G-8Z83GCJ91M');
 		</script>
 
-		<ClientRouter />
+		<script is:inline>document.documentElement.classList.add("js", "is-loading"); history.scrollRestoration = "manual";</script>
 		<Analytics />
 	</head>
 	<body>
@@ -89,38 +88,33 @@ import Analytics from '@vercel/analytics/astro'
 			href="#main"
 			class="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[100] focus:rounded-lg focus:bg-[#e85d1c] focus:px-4 focus:py-2 focus:text-sm focus:font-semibold focus:text-white"
 		>Skip to content</a>
-		<div class="page-layout">
-			<aside class="page-sidebar">
-				<Hero hero={hero} contact={contact} />
-			</aside>
-			<main id="main" class="page-content">
-				<IntroPanel hero={hero} />
-				<AboutSection about={about} />
-				<ProjectsSection projects={projects} />
-				<ExperienceSection experiences={experiences} />
-				<SkillsSection skills={skills} />
-				<EducationSection education={education} />
-				<ContactSection contact={contact} />
-			</main>
+		<!-- Intro curtain: painted with the first frame so nothing flashes before motion.ts runs. -->
+		<div class="loader" aria-hidden="true">
+			<div class="loader-under"></div>
+			<div class="loader-top">
+				<p class="loader-name heading">Htet Wai Yan</p>
+				<div class="loader-meta">
+					<span>Portfolio — 2026</span>
+					<span><span class="loader-count">0</span>%</span>
+				</div>
+				<div class="loader-bar"></div>
+			</div>
 		</div>
-		<BottomNav />
+		<div id="scroll-progress" class="fixed inset-x-0 top-0 z-[95] h-[3px] origin-left scale-x-0 bg-accent"></div>
+		<div class="cursor" aria-hidden="true"></div>
+		<main id="main">
+			<Hero hero={hero} contact={contact} skills={skills} />
+			<AboutSection about={about} />
+			<ProjectsSection projects={projects} />
+			<ExperienceSection experiences={experiences} />
+			<SkillsSection skills={skills} />
+			<EducationSection education={education} />
+			<ContactSection contact={contact} />
+		</main>
+		<SectionNav />
+		{contact.bookingUrl && <BookingModal bookingUrl={contact.bookingUrl} />}
 		<script>
-			function initAnimations() {
-				const observer = new IntersectionObserver(
-					(entries) => {
-						entries.forEach((entry) => {
-							if (entry.isIntersecting) {
-								entry.target.classList.add('in-view');
-								observer.unobserve(entry.target);
-							}
-						});
-					},
-					{ threshold: 0.08, rootMargin: '0px 0px -40px 0px' }
-				);
-				document.querySelectorAll('[data-animate]').forEach((el) => observer.observe(el));
-			}
-
-			document.addEventListener('astro:page-load', initAnimations);
+			import "../scripts/motion.ts";
 		</script>
 
 		<script>
@@ -168,7 +162,7 @@ import Analytics from '@vercel/analytics/astro'
 				window.addEventListener('scroll', onScroll, { passive: true });
 			}
 
-			document.addEventListener('astro:page-load', initTracking);
+			initTracking();
 		</script>
 	</body>
 </html>

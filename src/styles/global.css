@@ -1,130 +1,294 @@
 @import "tailwindcss";
 
-*, *::before, *::after {
-	box-sizing: border-box;
+@theme {
+	--color-accent: #e85d1c;
+	--color-ink: #0a0a0a;
+	--color-muted: #8a8a8a;
+	--font-display: "Space Grotesk", "Poppins", sans-serif;
 }
 
-html {
-	scroll-behavior: smooth;
+:root {
+	--gutter: clamp(16px, 3vw, 40px);
+	--rail: 0px; /* room for the left nav rail */
+	--shot: 1.85; /* screenshot aspect ratio (~2880x1556) */
 }
 
-body {
-	margin: 0;
-	background-color: #0a0a0a;
-	color: #ffffff;
-	font-family: "Poppins", "Poppins Placeholder", sans-serif;
-	line-height: 1.6;
-	-webkit-font-smoothing: antialiased;
-	-moz-osx-font-smoothing: grayscale;
+@media (min-width: 768px) {
+	:root {
+		--rail: 104px;
+	}
 }
 
-/* Display headings (the giant ghost-type h1/h2) use a grotesk;
-   h3 job/project titles stay on Poppins. */
-h1, h2 {
-	font-family: "Space Grotesk", "Poppins", sans-serif;
+@layer base {
+	*, *::before, *::after {
+		box-sizing: border-box;
+	}
+
+	/* Off-screen start positions (slide-ins) must never make the page pan sideways. */
+	html {
+		overflow-x: clip;
+	}
+
+	body {
+		margin: 0;
+		background-color: var(--color-ink);
+		color: #fff;
+		font-family: "Poppins", sans-serif;
+		line-height: 1.6;
+		-webkit-font-smoothing: antialiased;
+		-moz-osx-font-smoothing: grayscale;
+		overflow-x: clip;
+	}
+
+	h1, h2 {
+		font-family: var(--font-display);
+	}
+
+	a {
+		color: inherit;
+		text-decoration: none;
+	}
+
+	:focus-visible {
+		outline: 2px solid var(--color-accent);
+		outline-offset: 2px;
+		border-radius: 6px;
+	}
+
+	a[href],
+	button:not([disabled]),
+	label[for] {
+		cursor: pointer;
+	}
+
+	p, h1, h2, h3 {
+		margin: 0;
+	}
 }
 
-a {
-	color: inherit;
-	text-decoration: none;
+::selection {
+	background: var(--color-accent);
+	color: #fff;
 }
 
-/* Visible keyboard focus for all interactive elements */
-:focus-visible {
-	outline: 2px solid #e85d1c;
-	outline-offset: 2px;
-	border-radius: 6px;
+/* Hidden until motion.ts takes over; html.js is removed under reduced motion. */
+html.js [data-split],
+html.js [data-reveal],
+html.js .hero-block {
+	visibility: hidden;
 }
 
-a[href],
-button:not([disabled]),
-[role="button"],
-label[for],
-select,
-input[type="submit"],
-input[type="button"],
-input[type="reset"] {
-	cursor: pointer;
+@layer components {
+	.wrap {
+		padding-inline: var(--gutter);
+		padding-left: max(var(--gutter), var(--rail));
+		max-width: 1480px;
+		margin-inline: auto;
+	}
+
+	.section {
+		padding-block: clamp(96px, 12vw, 180px);
+	}
+
+	/* Section label: "(01) About" with a short rule */
+	.eyebrow {
+		display: inline-flex;
+		align-items: center;
+		gap: 12px;
+		font-size: 12px;
+		font-weight: 500;
+		letter-spacing: 0.04em;
+		color: var(--color-muted);
+	}
+
+	.eyebrow::after {
+		content: "";
+		width: 48px;
+		height: 1px;
+		background: rgb(255 255 255 / 0.2);
+	}
+
+	.heading {
+		font-weight: 700;
+		text-transform: uppercase;
+		line-height: 0.92;
+		letter-spacing: -0.035em;
+		font-size: clamp(44px, 7.5vw, 120px);
+	}
+
+	/* Thin divider rule */
+	.rule {
+		height: 1px;
+		background: rgb(255 255 255 / 0.1);
+		transform-origin: left;
+	}
+
+	/* Browser-window frame. Every screenshot gets the same box and is letterboxed
+	   (object-contain), so nothing is cropped and all projects match in size. */
+	.frame {
+		overflow: hidden;
+		border-radius: 14px;
+		border: 1px solid rgb(255 255 255 / 0.08);
+		background: #0b0b0b;
+		box-shadow: 0 30px 60px -30px rgb(0 0 0 / 0.8);
+	}
+
+	.frame-bar {
+		display: flex;
+		align-items: center;
+		gap: 6px;
+		height: 30px;
+		padding-inline: 12px;
+		border-bottom: 1px solid rgb(255 255 255 / 0.06);
+		background: #151515;
+	}
+
+	.frame-bar span {
+		width: 9px;
+		height: 9px;
+		border-radius: 50%;
+		background: #2c2c2c;
+	}
+
+	.frame img {
+		display: block;
+		width: 100%;
+		aspect-ratio: var(--shot);
+		object-fit: contain;
+		background: #0b0b0b;
+	}
+
+	.chip {
+		display: inline-block;
+		border-radius: 999px;
+		border: 1px solid rgb(255 255 255 / 0.08);
+		background: #181818;
+		padding: 6px 14px;
+		font-size: 13px;
+		color: #bdbdbd;
+	}
 }
 
-p {
-	margin: 0;
+/* Hero blocks drift on scroll (desktop): keep them on their own layer from the start. */
+@media (min-width: 1024px) {
+	.hero-block {
+		will-change: transform;
+	}
 }
 
-.page-layout {
-	display: grid;
-	grid-template-columns: 270px 1fr;
-	gap: 48px;
-	max-width: 1200px;
-	margin: 0 auto;
-	padding: 36px 32px 80px;
-	align-items: start;
+/* ── Projects: sticky stacking panels (desktop) ── */
+.project-panel {
+	background: var(--color-ink);
 }
 
-.page-sidebar {
-	position: sticky;
-	top: 36px;
+@media (min-width: 1024px) {
+	.project-panel {
+		position: sticky;
+		top: calc(88px + var(--i) * 18px);
+		height: calc(100svh - 150px);
+		max-height: 820px;
+	}
+
+	/* Shots are sized from the column height so both fit, identically, in every panel. */
+	.project-shots {
+		container-type: size;
+	}
+
+	.project-shots .frame {
+		width: min(100cqw, ((100cqh - 16px) / 2 - 31px) * var(--shot));
+	}
 }
 
-.page-content {
+/* Custom cursor (fine pointers only; toggled on by motion.ts) */
+.cursor {
+	position: fixed;
+	left: 0;
+	top: 0;
+	z-index: 100;
+	width: 14px;
+	height: 14px;
+	margin: -7px 0 0 -7px;
+	border-radius: 50%;
+	background: #fff;
+	mix-blend-mode: difference;
+	pointer-events: none;
+	opacity: 0;
+	transition: width 0.3s, height 0.3s, margin 0.3s, opacity 0.3s;
+}
+
+.cursor.is-on {
+	opacity: 1;
+}
+
+.cursor.is-hover {
+	width: 56px;
+	height: 56px;
+	margin: -28px 0 0 -28px;
+}
+
+html:has(dialog[open]) {
+	overflow: hidden;
+}
+
+/* ── Intro curtain ── */
+.loader {
+	display: none;
+}
+
+html.js .loader {
+	display: block;
+	position: fixed;
+	inset: 0;
+	z-index: 200;
+	pointer-events: none;
+}
+
+html.is-loading {
+	overflow: hidden;
+}
+
+.loader-top,
+.loader-under {
+	position: absolute;
+	inset: 0;
+	will-change: transform;
+}
+
+.loader-under {
+	background: var(--color-accent);
+}
+
+.loader-top {
 	display: flex;
 	flex-direction: column;
-	gap: 88px;
-	padding-bottom: 120px;
-	min-width: 0;
+	align-items: center;
+	justify-content: center;
+	gap: 20px;
+	background: var(--color-ink);
 }
 
-@media (max-width: 900px) {
-	.page-layout {
-		grid-template-columns: 1fr;
-		padding: 28px 20px 64px;
-		gap: 36px;
-	}
-
-	.page-sidebar {
-		position: relative;
-		top: 0;
-	}
-
-	.page-content {
-		gap: 64px;
-	}
+.loader-name {
+	font-family: var(--font-display);
+	font-size: clamp(40px, 9vw, 128px);
+	visibility: hidden; /* until split, so the unsplit/fallback-font text never flashes */
 }
 
-@media (max-width: 480px) {
-	.page-layout {
-		padding: 20px 16px 56px;
-	}
-
-	.page-content {
-		gap: 52px;
-	}
+.loader-meta {
+	display: flex;
+	justify-content: space-between;
+	width: min(80vw, 560px);
+	font-size: 11px;
+	font-weight: 600;
+	letter-spacing: 0.16em;
+	text-transform: uppercase;
+	color: var(--color-muted);
+	font-variant-numeric: tabular-nums;
 }
 
-/* ── Scroll-reveal animations ── */
-[data-animate] {
-	opacity: 0;
-	transform: translateY(28px);
-	transition:
-		opacity 0.65s cubic-bezier(0.16, 1, 0.3, 1),
-		transform 0.65s cubic-bezier(0.16, 1, 0.3, 1);
-}
-
-[data-animate].in-view {
-	opacity: 1;
-	transform: translateY(0);
-}
-
-[data-delay="1"] { transition-delay: 80ms; }
-[data-delay="2"] { transition-delay: 160ms; }
-[data-delay="3"] { transition-delay: 240ms; }
-[data-delay="4"] { transition-delay: 320ms; }
-[data-delay="5"] { transition-delay: 400ms; }
-
-@media (prefers-reduced-motion: reduce) {
-	[data-animate] {
-		opacity: 1;
-		transform: none;
-		transition: none;
-	}
+.loader-bar {
+	width: min(80vw, 560px);
+	height: 1px;
+	background: var(--color-accent);
+	transform: scaleX(0);
+	transform-origin: left;
 }
